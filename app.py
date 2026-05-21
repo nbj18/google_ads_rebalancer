@@ -201,6 +201,108 @@ def get_day_labels(remaining_days):
     today = date.today()
     return [(today + timedelta(days=i)).strftime('%a %d') for i in range(remaining_days)]
 
+def generate_written_summary(sellers, run_date):
+    """Build a narrative weekly summary from the rebalancing data."""
+    all_camps = [c for s in sellers.values() for c in s['campaigns']]
+
+    # Profitability
+    profit_buckets = {'Profit': [], 'Breakeven': [], 'Loss': [], 'Unknown': []}
+    for sid, s in sellers.items():
+        st_label, _ = account_status(s.get('account_metrics', {}))
+        profit_buckets[st_label].append(s.get('seller_name') or sid[:12])
+
+    # Spend alignment + totals
+    gap_buckets = {'Underspend': [], 'On Target': [], 'Overspend': []}
+    total_yesterday = total_target = total_gap = 0
+    for sid, s in sellers.items():
+        plan = s['weekly_plan']
+        y = safe_float(plan['yesterday_daily_spend']) or 0
+        t = safe_float(plan['this_week_target']) or 0
+        g = safe_float(plan['remaining_gap']) or 0
+        total_yesterday += y
+        total_target    += t
+        total_gap       += g
+        gl, _ = gap_status(g)
+        gap_buckets[gl].append(s.get('seller_name') or sid[:12])
+
+    # Actions
+    action_map = {}
+    for c in all_camps:
+        action_map[c['action_type']] = action_map.get(c['action_type'], 0) + 1
+    n_scale_up   = sum(v for k, v in action_map.items() if 'scale_up' in k)
+    n_hold       = action_map.get('hold', 0) + action_map.get('hold_cooldown', 0)
+    n_watch      = action_map.get('watch_reduce', 0)
+    n_scale_dn   = action_map.get('scale_down', 0)
+    n_pause      = action_map.get('pause', 0)
+
+    # Budget reallocation
+    total_freed    = sum(s['reallocation']['total_freed']    for s in sellers.values())
+    total_deployed = sum(s['reallocation']['total_deployed'] for s in sellers.values())
+
+    # Alerts
+    all_alerts = [a for s in sellers.values() for a in s['alerts']]
+    critical_alerts = [a for a in all_alerts if a['priority'] == 'CRITICAL']
+    high_alerts     = [a for a in all_alerts if a['priority'] == 'HIGH']
+
+    # Top performers: Profit + underspending (opportunity to scale)
+    top_ops = [s.get('seller_name') or sid[:12]
+               for sid, s in sellers.items()
+               if account_status(s.get('account_metrics',{}))[0] == 'Profit'
+               and gap_status(s['weekly_plan']['remaining_gap'])[0] == 'Underspend']
+
+    # Needs attention: Loss + overspending OR Loss + large underspend gap
+    attention = []
+    for sid, s in sellers.items():
+        st_label, _ = account_status(s.get('account_metrics', {}))
+        gl, _ = gap_status(s['weekly_plan']['remaining_gap'])
+        g = safe_float(s['weekly_plan']['remaining_gap']) or 0
+        am = s.get('account_metrics', {})
+        r3 = safe_float(am.get('ratio_3d'))
+        be = safe_float(am.get('be_0pct'))
+        name = s.get('seller_name') or sid[:12]
+        if st_label == 'Loss' and gl == 'Overspend':
+            attention.append((name, 'overspending while in loss'))
+        elif st_label == 'Loss' and r3 and be and r3 > be * 1.5:
+            attention.append((name, f'Spend/GMV {r3:.1f}% vs break-even {be:.1f}%'))
+
+    # Remaining days context
+    rd = get_remaining_days()
+    days_desc = {4: 'Thursday — 4 days to go', 3: 'Friday — 3 days to go',
+                 2: 'Saturday — 2 days to go', 1: 'Sunday — final day'}
+    today_desc = days_desc.get(rd, f'{rd} days to Sunday')
+
+    # Pace assessment
+    pace_ok   = sum(1 for s in sellers.values()
+                    if abs(safe_float(s['weekly_plan']['remaining_gap']) or 0) <= 500)
+    pace_risk = len(sellers) - pace_ok
+
+    return {
+        'run_date':       run_date,
+        'today_desc':     today_desc,
+        'total_sellers':  len(sellers),
+        'total_camps':    len(all_camps),
+        'total_yesterday': total_yesterday,
+        'total_target':    total_target,
+        'total_gap':       total_gap,
+        'profit_buckets':  profit_buckets,
+        'gap_buckets':     gap_buckets,
+        'n_scale_up':      n_scale_up,
+        'n_hold':          n_hold,
+        'n_watch':         n_watch,
+        'n_scale_dn':      n_scale_dn,
+        'n_pause':         n_pause,
+        'total_freed':     total_freed,
+        'total_deployed':  total_deployed,
+        'all_alerts':      all_alerts,
+        'critical_alerts': critical_alerts,
+        'high_alerts':     high_alerts,
+        'top_ops':         top_ops,
+        'attention':       attention,
+        'pace_ok':         pace_ok,
+        'pace_risk':       pace_risk,
+        'remaining_days':  rd,
+    }
+
 # ---------------------------------------------------------------------------
 # Load data
 # ---------------------------------------------------------------------------
@@ -640,24 +742,111 @@ else:
     # ════════════════════════════════════════════════════════
     with tab_summary:
 
-        # ── KPI strip ─────────────────────────────────────────
-        all_camps = [c for s in sellers.values() for c in s['campaigns']]
-        n_scale_up   = sum(1 for c in all_camps if 'scale_up' in c['action_type'])
-        n_hold       = sum(1 for c in all_camps if c['action_type'] in ('hold','hold_cooldown'))
-        n_reduce     = sum(1 for c in all_camps if c['action_type'] in ('scale_down','watch_reduce'))
-        n_pause      = sum(1 for c in all_camps if c['action_type'] == 'pause')
-        n_alerts_all = sum(len(s['alerts']) for s in sellers.values())
-        total_freed    = sum(s['reallocation']['total_freed']    for s in sellers.values())
-        total_deployed = sum(s['reallocation']['total_deployed'] for s in sellers.values())
+        sm = generate_written_summary(sellers, run_date)
 
+        # ── KPI strip ─────────────────────────────────────────
+        n_alerts_all = len(sm['all_alerts'])
         k1, k2, k3, k4, k5, k6 = st.columns(6)
-        k1.markdown(f'<div class="summary-kpi"><div class="sk-label">Scale Up</div><div class="sk-value kpi-green">{n_scale_up}</div><div class="sk-sub">campaigns</div></div>', unsafe_allow_html=True)
-        k2.markdown(f'<div class="summary-kpi"><div class="sk-label">Hold</div><div class="sk-value kpi-blue">{n_hold}</div><div class="sk-sub">campaigns</div></div>', unsafe_allow_html=True)
-        k3.markdown(f'<div class="summary-kpi"><div class="sk-label">Reduce</div><div class="sk-value kpi-amber">{n_reduce}</div><div class="sk-sub">campaigns</div></div>', unsafe_allow_html=True)
-        k4.markdown(f'<div class="summary-kpi"><div class="sk-label">Pause</div><div class="sk-value kpi-red">{n_pause}</div><div class="sk-sub">campaigns</div></div>', unsafe_allow_html=True)
-        k5.markdown(f'<div class="summary-kpi"><div class="sk-label">Budget Freed</div><div class="sk-value kpi-amber">₹{total_freed:,.0f}</div><div class="sk-sub">reallocatable</div></div>', unsafe_allow_html=True)
+        k1.markdown(f'<div class="summary-kpi"><div class="sk-label">Scale Up</div><div class="sk-value kpi-green">{sm["n_scale_up"]}</div><div class="sk-sub">campaigns</div></div>', unsafe_allow_html=True)
+        k2.markdown(f'<div class="summary-kpi"><div class="sk-label">Hold</div><div class="sk-value kpi-blue">{sm["n_hold"]}</div><div class="sk-sub">campaigns</div></div>', unsafe_allow_html=True)
+        k3.markdown(f'<div class="summary-kpi"><div class="sk-label">Watch / Reduce</div><div class="sk-value kpi-amber">{sm["n_watch"] + sm["n_scale_dn"]}</div><div class="sk-sub">campaigns</div></div>', unsafe_allow_html=True)
+        k4.markdown(f'<div class="summary-kpi"><div class="sk-label">Pause</div><div class="sk-value kpi-red">{sm["n_pause"]}</div><div class="sk-sub">campaigns</div></div>', unsafe_allow_html=True)
+        k5.markdown(f'<div class="summary-kpi"><div class="sk-label">Budget Freed</div><div class="sk-value kpi-amber">₹{sm["total_freed"]:,.0f}</div><div class="sk-sub">reallocatable</div></div>', unsafe_allow_html=True)
         k6.markdown(f'<div class="summary-kpi"><div class="sk-label">Risk Alerts</div><div class="sk-value kpi-red">{n_alerts_all}</div><div class="sk-sub">across all sellers</div></div>', unsafe_allow_html=True)
 
+        st.markdown('<br>', unsafe_allow_html=True)
+
+        # ── Written weekly summary ─────────────────────────────
+        st.markdown('<div class="section-title">Weekly Written Summary</div>', unsafe_allow_html=True)
+
+        pb  = sm['profit_buckets']
+        gb  = sm['gap_buckets']
+        rd  = sm['remaining_days']
+        att = sm['attention']
+        top = sm['top_ops']
+        crit = sm['critical_alerts']
+        high = sm['high_alerts']
+
+        # Section 1 — Portfolio overview
+        gap_dir = "below" if sm['total_gap'] > 0 else "above"
+        gap_abs = abs(sm['total_gap'])
+        spend_pct = (sm['total_yesterday'] / sm['total_target'] * 100) if sm['total_target'] else 0
+        st.markdown(f"""
+**📊 Portfolio at a Glance — {run_date}**
+
+Today is **{sm['today_desc']}**. Across all {sm['total_sellers']} sellers and {sm['total_camps']} campaigns, yesterday's combined daily spend was **₹{sm['total_yesterday']:,.0f}**, against a Sunday exit target of **₹{sm['total_target']:,.0f}** — running at **{spend_pct:.0f}%** of target. The portfolio is collectively **₹{gap_abs:,.0f} {gap_dir} target**, with {rd} day{'s' if rd>1 else ''} remaining to close the gap.
+
+Profitability snapshot: **{len(pb['Profit'])} seller{'s' if len(pb['Profit'])!=1 else ''} profitable**, {len(pb['Breakeven'])} at break-even, and **{len(pb['Loss'])} in loss**. On spend alignment: {len(gb['Underspend'])} underspending, {len(gb['On Target'])} on target, {len(gb['Overspend'])} overspending.
+""")
+
+        # Section 2 — Actions taken
+        net_budget = sm['total_deployed'] - sm['total_freed']
+        net_dir    = "increase" if net_budget >= 0 else "decrease"
+        st.markdown(f"""
+**⚙️ Today's Recommendations**
+
+The engine recommends scaling up **{sm['n_scale_up']} campaign{'s' if sm['n_scale_up']!=1 else ''}**, holding **{sm['n_hold']}**, watching/reducing **{sm['n_watch'] + sm['n_scale_dn']}**, and pausing **{sm['n_pause']}** outright. Capital reallocation frees **₹{sm['total_freed']:,.0f}** from underperforming campaigns and deploys **₹{sm['total_deployed']:,.0f}** into high-scorers — a net budget **{net_dir} of ₹{abs(net_budget):,.0f}** across the portfolio.
+""")
+
+        # Section 3 — Opportunities
+        if top:
+            st.markdown(f"""
+**🟢 Scaling Opportunities**
+
+The following sellers are currently **profitable and underspending** — prime candidates to push harder before Sunday:
+{chr(10).join(f'- **{n}**' for n in top)}
+
+These accounts have headroom to absorb higher spend without breaching break-even. Applying the recommended budgets here should meaningfully close the gap.
+""")
+
+        # Section 4 — Needs attention
+        if att:
+            st.markdown("**🔴 Sellers Needing Immediate Attention**\n")
+            for name, reason in att:
+                st.markdown(f"- **{name}** — {reason}")
+            st.markdown("\nThese sellers are burning spend without sufficient GMV return. Prioritise reducing their budgets today before the situation worsens into the weekend.")
+        else:
+            st.markdown("**🟢 No sellers are simultaneously in loss and overspending** — healthy signal for the portfolio.")
+
+        # Section 5 — Risk flags
+        if crit or high:
+            st.markdown(f"""
+**⚠️ Risk Flags**
+
+There are **{len(crit)} CRITICAL** and **{len(high)} HIGH** priority alerts today.
+""")
+            if crit:
+                st.markdown("Critical issues requiring same-day action:")
+                for a in crit[:5]:
+                    st.markdown(f"- {a['message']} *(Campaign {a['campaign_id']})*")
+            if high and len(high) <= 6:
+                st.markdown("High-priority items to address:")
+                for a in high[:4]:
+                    st.markdown(f"- {a['message']} *(Campaign {a['campaign_id']})*")
+        else:
+            st.markdown("**✅ No critical or high-priority alerts** — portfolio is structurally healthy today.")
+
+        # Section 6 — Weekly outlook
+        on_track   = sum(1 for s in sellers.values()
+                         if gap_status(s['weekly_plan']['remaining_gap'])[0] in ('On Target', 'Underspend')
+                         and account_status(s.get('account_metrics',{}))[0] in ('Profit','Breakeven'))
+        at_risk    = sm['total_sellers'] - on_track
+        pace_stmt  = (f"**{on_track} seller{'s' if on_track!=1 else ''}** appear on track to meet their Sunday targets at current pace. "
+                      f"{'The remaining ' + str(at_risk) + ' require active budget intervention today.' if at_risk else 'All sellers are on track — no emergency interventions needed.'}")
+
+        overspend_names = gb['Overspend']
+        os_stmt = (f" Note that **{', '.join(overspend_names[:3])}{'...' if len(overspend_names)>3 else ''}** {'are' if len(overspend_names)>1 else 'is'} already above yesterday's daily run-rate — monitor these for week-end overshoot."
+                   if overspend_names else "")
+
+        st.markdown(f"""
+**📅 Weekly Outlook**
+
+{pace_stmt}{os_stmt}
+
+With {rd} day{'s' if rd>1 else ''} to Sunday, the focus should be: **execute scale-ups on profitable underspenders today**, reduce budgets on loss-making overspenders immediately, and monitor utilisation closely on Friday to decide whether further adjustments are needed before the weekend.
+""")
+
+        st.divider()
         st.markdown('<br>', unsafe_allow_html=True)
 
         # ── Budget utilisation projection ──────────────────────
