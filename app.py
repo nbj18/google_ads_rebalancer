@@ -1,4 +1,5 @@
 import json, math, io
+from datetime import date, timedelta
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -8,7 +9,7 @@ st.set_page_config(
     page_title="ShopDeck · Budget Rebalancer",
     page_icon="⚖️",
     layout="wide",
-    initial_sidebar_state="collapsed",
+    initial_sidebar_state="expanded",
 )
 
 # ---------------------------------------------------------------------------
@@ -20,7 +21,6 @@ st.markdown("""
   #MainMenu, footer, header { visibility: hidden; }
   .block-container { padding-top: 1rem; padding-bottom: 1rem; }
 
-  /* ── Top header bar ─────────────────────────────────── */
   .top-header {
     display: flex; align-items: center; justify-content: space-between;
     background: #0f172a; color: white;
@@ -30,16 +30,6 @@ st.markdown("""
   .top-header .brand span { color: #38bdf8; }
   .top-header .meta { font-size: 12px; color: #94a3b8; }
 
-  /* ── Filter bar ─────────────────────────────────────── */
-  .filter-bar {
-    background: #f8fafc; border: 1px solid #e2e8f0;
-    border-radius: 10px; padding: 12px 18px;
-    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-    margin-bottom: 16px;
-  }
-  .filter-label { font-size: 12px; font-weight: 600; color: #64748b; margin-right: 4px; }
-
-  /* ── Status badges ──────────────────────────────────── */
   .badge {
     display: inline-block; padding: 3px 10px;
     border-radius: 20px; font-size: 11px; font-weight: 700;
@@ -56,7 +46,6 @@ st.markdown("""
   .badge-reduce     { background:#fee2e2; color:#991b1b; }
   .badge-watch      { background:#ffedd5; color:#9a3412; }
 
-  /* ── Metric cards ───────────────────────────────────── */
   .metric-card {
     background: white; border: 1px solid #e2e8f0;
     border-radius: 10px; padding: 16px 20px;
@@ -69,7 +58,6 @@ st.markdown("""
   .metric-card .pos   { color: #16a34a; }
   .metric-card .neg   { color: #dc2626; }
 
-  /* ── Alert boxes ────────────────────────────────────── */
   .alert-critical { background:#fef2f2; border-left:4px solid #dc2626;
     padding:10px 14px; border-radius:6px; margin-bottom:8px; }
   .alert-high     { background:#fffbeb; border-left:4px solid #f59e0b;
@@ -77,26 +65,29 @@ st.markdown("""
   .alert-medium   { background:#eff6ff; border-left:4px solid #3b82f6;
     padding:10px 14px; border-radius:6px; margin-bottom:8px; }
   .alert-text     { font-size:13px; color:#1e293b; }
-  .alert-id       { font-weight:700; }
+  .alert-name     { font-weight:700; color:#0f172a; }
+  .alert-id       { font-size:11px; color:#64748b; font-family:monospace; }
 
-  /* ── Back button ────────────────────────────────────── */
-  .back-btn {
-    display:inline-flex; align-items:center; gap:6px;
-    font-size:13px; color:#0f172a; font-weight:600;
-    background:#f1f5f9; border:1px solid #e2e8f0;
-    padding:6px 14px; border-radius:8px; cursor:pointer;
-    text-decoration:none; margin-bottom:16px;
-  }
-
-  /* ── Section title ──────────────────────────────────── */
   .section-title {
     font-size:15px; font-weight:700; color:#0f172a;
     margin:20px 0 10px; padding-bottom:6px;
     border-bottom:2px solid #e2e8f0;
   }
-
-  /* ── Account row card ───────────────────────────────── */
   .row-count { font-size:13px; color:#64748b; margin-bottom:8px; }
+
+  .summary-kpi {
+    background: white; border: 1px solid #e2e8f0; border-radius: 10px;
+    padding: 14px 18px; text-align: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,.05);
+  }
+  .summary-kpi .sk-label { font-size:11px; font-weight:600; color:#64748b;
+    text-transform:uppercase; letter-spacing:.5px; }
+  .summary-kpi .sk-value { font-size:26px; font-weight:800; margin:4px 0 2px; }
+  .summary-kpi .sk-sub   { font-size:11px; color:#94a3b8; }
+  .kpi-green { color:#16a34a; }
+  .kpi-red   { color:#dc2626; }
+  .kpi-blue  { color:#2563eb; }
+  .kpi-amber { color:#d97706; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -121,12 +112,12 @@ def badge(text, cls):
     return f'<span class="badge {cls}">{text}</span>'
 
 def account_status(metrics):
-    r3    = safe_float(metrics.get('ratio_3d'))
-    tgt   = safe_float(metrics.get('be_target'))
-    be    = safe_float(metrics.get('be_0pct'))
+    r3  = safe_float(metrics.get('ratio_3d'))
+    tgt = safe_float(metrics.get('be_target'))
+    be  = safe_float(metrics.get('be_0pct'))
     if r3 is None or tgt is None or be is None: return 'Unknown', 'badge-hold'
-    if r3 < tgt:  return 'Profit',    'badge-profit'
-    if r3 < be:   return 'Breakeven', 'badge-breakeven'
+    if r3 < tgt: return 'Profit',    'badge-profit'
+    if r3 < be:  return 'Breakeven', 'badge-breakeven'
     return 'Loss', 'badge-loss'
 
 def gap_status(gap):
@@ -136,12 +127,14 @@ def gap_status(gap):
     if g < -500:  return 'Overspend',  'badge-overspend'
     return 'On Target', 'badge-ontarget'
 
-def state_badge_cls(state):
-    s = state.lower()
-    if 'aggressively' in s or 'carefully' in s: return 'badge-scale'
-    if 'hold' in s:   return 'badge-hold'
-    if 'watch' in s:  return 'badge-watch'
-    return 'badge-reduce'
+def metric_card(col, label, value, sub='', pos=None):
+    sub_cls = 'pos' if pos is True else ('neg' if pos is False else '')
+    col.markdown(f"""
+    <div class="metric-card">
+      <div class="label">{label}</div>
+      <div class="value">{value}</div>
+      <div class="sub {sub_cls}">{sub}</div>
+    </div>""", unsafe_allow_html=True)
 
 @st.cache_data(ttl=300)
 def load_results():
@@ -200,8 +193,16 @@ def build_excel(sellers):
     buf.seek(0)
     return buf.getvalue()
 
+def get_remaining_days():
+    today = date.today()
+    return 7 - today.weekday()
+
+def get_day_labels(remaining_days):
+    today = date.today()
+    return [(today + timedelta(days=i)).strftime('%a %d') for i in range(remaining_days)]
+
 # ---------------------------------------------------------------------------
-# Load
+# Load data
 # ---------------------------------------------------------------------------
 
 data = load_results()
@@ -209,22 +210,65 @@ if data is None:
     st.error("⚠️ No results found. The daily engine hasn't run yet.")
     st.stop()
 
-run_date = data.get('run_date', 'Unknown')
-sellers  = data.get('sellers', {})
+run_date   = data.get('run_date', 'Unknown')
+sellers    = data.get('sellers', {})
 seller_ids = list(sellers.keys())
 
-# Session state
 if 'selected_seller' not in st.session_state:
     st.session_state.selected_seller = None
+
+# ---------------------------------------------------------------------------
+# Sidebar — seller selector
+# ---------------------------------------------------------------------------
+
+with st.sidebar:
+    st.markdown("### ⚖️ Budget Rebalancer")
+    st.markdown(f"<small style='color:#64748b'>Run: **{run_date}**</small>", unsafe_allow_html=True)
+    st.divider()
+
+    st.markdown("**Jump to Seller**")
+    seller_display = {sid: (s.get('seller_name') or sid) for sid, s in sellers.items()}
+    all_names = ["— All Sellers —"] + list(seller_display.values())
+
+    current_name = "— All Sellers —"
+    if st.session_state.selected_seller:
+        current_name = seller_display.get(st.session_state.selected_seller, "— All Sellers —")
+
+    chosen_name = st.selectbox(
+        "Seller", all_names,
+        index=all_names.index(current_name) if current_name in all_names else 0,
+        label_visibility="collapsed",
+    )
+
+    # Navigate on selection change
+    if chosen_name == "— All Sellers —":
+        if st.session_state.selected_seller is not None:
+            st.session_state.selected_seller = None
+            st.rerun()
+    else:
+        for sid, name in seller_display.items():
+            if name == chosen_name and sid != st.session_state.selected_seller:
+                st.session_state.selected_seller = sid
+                st.rerun()
+
+    st.divider()
+    excel_bytes = build_excel(sellers)
+    st.download_button(
+        "⬇ Export All (Excel)", excel_bytes,
+        f"rebalancing_{run_date}.xlsx",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        use_container_width=True,
+    )
 
 # ---------------------------------------------------------------------------
 # Header
 # ---------------------------------------------------------------------------
 
+total_camps = sum(len(s['campaigns']) for s in sellers.values())
 st.markdown(f"""
 <div class="top-header">
   <div class="brand">⚖️ &nbsp;ShopDeck · <span>Budget Rebalancer</span></div>
-  <div class="meta">Last run: {run_date} &nbsp;|&nbsp; {len(sellers)} sellers &nbsp;|&nbsp; {sum(len(s['campaigns']) for s in sellers.values())} campaigns</div>
+  <div class="meta">Last run: {run_date} &nbsp;|&nbsp; {len(sellers)} sellers &nbsp;|&nbsp; {total_camps} campaigns</div>
 </div>
 """, unsafe_allow_html=True)
 
@@ -243,288 +287,500 @@ if st.session_state.selected_seller:
     status, status_cls = account_status(metrics)
     gap_lbl, gap_cls   = gap_status(plan['remaining_gap'])
 
-    # Back button
+    # Build campaign name lookup for alerts
+    camp_name_lookup = {str(c['campaign_id']): c.get('campaign_name') or str(c['campaign_id'])
+                        for c in camps}
+
     if st.button("← Back to All Sellers"):
         st.session_state.selected_seller = None
         st.rerun()
 
-    # Seller title
     seller_name = sdata.get('seller_name') or ''
-    c1, c2 = st.columns([6, 1])
-    with c1:
+    hc1, hc2 = st.columns([6, 1])
+    with hc1:
         title = f"**{seller_name}**  `{sid}`" if seller_name else f"`{sid}`"
         st.markdown(f"### {title}")
-    with c2:
+    with hc2:
         st.markdown(badge(status, status_cls) + '&nbsp;' + badge(gap_lbl, gap_cls), unsafe_allow_html=True)
 
-    # Weekly metric cards
-    st.markdown('<div class="section-title">Weekly Planning</div>', unsafe_allow_html=True)
-    cols = st.columns(5)
-    def metric_card(col, label, value, sub='', pos=None):
-        sub_cls = 'pos' if pos is True else ('neg' if pos is False else '')
-        col.markdown(f"""
-        <div class="metric-card">
-          <div class="label">{label}</div>
-          <div class="value">{value}</div>
-          <div class="sub {sub_cls}">{sub}</div>
-        </div>""", unsafe_allow_html=True)
+    # ── Tabs inside deep dive ────────────────────────────────
+    t1, t2, t3 = st.tabs(["Planning & Campaigns", "Charts", "Alerts & Reallocation"])
 
-    metric_card(cols[0], "Last Sunday Spend",  fmt_inr(plan['last_sunday_spend']))
-    metric_card(cols[1], "Sunday Target",       fmt_inr(plan['this_week_target']))
-    metric_card(cols[2], "Yesterday Spend",     fmt_inr(plan['yesterday_daily_spend']))
-    gap_val = safe_float(plan['remaining_gap'])
-    metric_card(cols[3], "Gap",
-                f"₹{abs(gap_val):,.0f}" if gap_val else '—',
-                "to grow" if (gap_val and gap_val > 0) else "above target",
-                pos=(gap_val is not None and gap_val <= 0))
-    pace_val = safe_float(plan['required_daily_pace'])
-    metric_card(cols[4], "Daily Pace Needed",
-                f"₹{abs(pace_val):,.0f}/day" if pace_val else '—',
-                plan['direction'],
-                pos=(pace_val is not None and pace_val <= 0))
+    # ── Tab 1: Planning & Campaigns ──────────────────────────
+    with t1:
+        st.markdown('<div class="section-title">Weekly Planning</div>', unsafe_allow_html=True)
+        cols = st.columns(5)
+        metric_card(cols[0], "Last Sunday Spend", fmt_inr(plan['last_sunday_spend']))
+        metric_card(cols[1], "Sunday Target",      fmt_inr(plan['this_week_target']))
+        metric_card(cols[2], "Yesterday Spend",    fmt_inr(plan['yesterday_daily_spend']))
+        gap_val = safe_float(plan['remaining_gap'])
+        metric_card(cols[3], "Gap",
+                    f"₹{abs(gap_val):,.0f}" if gap_val else '—',
+                    "to grow" if (gap_val and gap_val > 0) else "above target",
+                    pos=(gap_val is not None and gap_val <= 0))
+        pace_val = safe_float(plan['required_daily_pace'])
+        metric_card(cols[4], "Daily Pace Needed",
+                    f"₹{abs(pace_val):,.0f}/day" if pace_val else '—',
+                    plan['direction'],
+                    pos=(pace_val is not None and pace_val <= 0))
 
-    st.markdown('<br>', unsafe_allow_html=True)
-
-    # Capital reallocation strip
-    r1, r2, r3, r4 = st.columns(4)
-    metric_card(r1, "Budget Freed",    fmt_inr(realloc['total_freed']))
-    metric_card(r2, "Budget Deployed", fmt_inr(realloc['total_deployed']))
-    metric_card(r3, "Net Surplus",     fmt_inr(realloc['net_surplus']))
-    metric_card(r4, "Active Alerts",   str(len(alerts)))
-
-    # Campaign table
-    st.markdown(f'<div class="section-title">Campaign Analysis ({len(camps)} campaigns)</div>', unsafe_allow_html=True)
-    df = campaigns_to_df(camps).sort_values('Score', ascending=False)
-
-    # Add badge html for State column display
-    st.dataframe(
-        df,
-        use_container_width=True,
-        hide_index=True,
-        column_config={
-            'Budget':        st.column_config.NumberColumn(format='₹%.0f'),
-            'Rec Budget':    st.column_config.NumberColumn(format='₹%.0f'),
-            'Δ%':            st.column_config.NumberColumn(format='%+.1f%%'),
-            '3D Spend/GMV%': st.column_config.NumberColumn(format='%.2f%%'),
-            'Target%':       st.column_config.NumberColumn(format='%.2f%%'),
-            'Break-even%':   st.column_config.NumberColumn(format='%.2f%%'),
-            'Utilization%':  st.column_config.NumberColumn(format='%.1f%%'),
-            'Score':         st.column_config.ProgressColumn(min_value=0, max_value=100, format='%.0f'),
-        },
-    )
-
-    dl_col1, dl_col2 = st.columns([1, 5])
-    with dl_col1:
-        st.download_button(
-            "⬇ Export CSV",
-            df.to_csv(index=False).encode('utf-8'),
-            f"{sid[:20]}_campaigns.csv", "text/csv",
-        )
-
-    # Charts
-    st.markdown('<div class="section-title">Charts</div>', unsafe_allow_html=True)
-    ch1, ch2 = st.columns(2)
-
-    with ch1:
-        st.markdown("**Budget Movement**")
-        valid = [(str(c['campaign_id']), safe_float(c['budget']), safe_float(c['recommended_budget']))
-                 for c in camps if safe_float(c['budget']) and safe_float(c['recommended_budget'])]
-        if valid:
-            ids, curr, rec = zip(*valid)
-            fig = go.Figure()
-            fig.add_trace(go.Bar(name='Current', y=list(ids), x=list(curr),
-                orientation='h', marker_color='#cbd5e1'))
-            fig.add_trace(go.Bar(name='Recommended', y=list(ids), x=list(rec),
-                orientation='h',
-                marker_color=['#22c55e' if r >= c else '#ef4444' for r, c in zip(rec, curr)]))
-            fig.update_layout(barmode='overlay', height=max(280, len(valid)*32),
-                xaxis_title='Budget (₹)', paper_bgcolor='white', plot_bgcolor='white',
-                legend=dict(orientation='h', y=1.08), margin=dict(l=0,r=0,t=30,b=0))
-            st.plotly_chart(fig, use_container_width=True)
-        else:
-            st.info("No budget data available.")
-
-    with ch2:
-        st.markdown("**3D Spend/GMV by Campaign**")
-        eff_rows = [{'Campaign': str(c['campaign_id']),
-                     'Spend/GMV%': safe_float(c['ratio_3d']),
-                     'Efficiency': c['efficiency_label']}
-                    for c in camps if safe_float(c['ratio_3d']) is not None]
-        if eff_rows:
-            color_map = {
-                'Efficient': '#22c55e', 'Acceptable': '#facc15',
-                'Near Break-even': '#fb923c', 'Above Break-even': '#ef4444',
-                'Severely Above Break-even': '#7f1d1d',
-                'No GMV': '#374151', 'No Recent Data': '#9ca3af', 'Unknown': '#9ca3af',
-            }
-            fig = px.bar(pd.DataFrame(eff_rows), x='Campaign', y='Spend/GMV%',
-                         color='Efficiency', color_discrete_map=color_map)
-            fig.update_layout(height=max(280, len(eff_rows)*25), xaxis_tickangle=-45,
-                paper_bgcolor='white', plot_bgcolor='white',
-                margin=dict(l=0,r=0,t=30,b=0))
-            st.plotly_chart(fig, use_container_width=True)
-        else:
-            st.info("No Spend/GMV data available.")
-
-    # Risk alerts
-    if alerts:
-        st.markdown(f'<div class="section-title">Risk Alerts ({len(alerts)})</div>', unsafe_allow_html=True)
-        for a in alerts:
-            cls = {'CRITICAL': 'alert-critical', 'HIGH': 'alert-high', 'MEDIUM': 'alert-medium'}.get(a['priority'], 'alert-medium')
-            icon = {'CRITICAL': '🔴', 'HIGH': '🟠', 'MEDIUM': '🟡'}.get(a['priority'], '⚪')
-            st.markdown(f"""
-            <div class="{cls}">
-              <span class="alert-text">{icon} <span class="alert-id">{a['campaign_id']}</span> — {a['message']}</span>
-            </div>""", unsafe_allow_html=True)
-
-# ---------------------------------------------------------------------------
-# ALL SELLERS OVERVIEW
-# ---------------------------------------------------------------------------
-
-else:
-    # ── Filter bar ──────────────────────────────────────────
-    st.markdown('<div class="section-title" style="margin-top:0">Filters</div>', unsafe_allow_html=True)
-    f1, f2, f3, f4 = st.columns([2, 2, 2, 1])
-
-    with f1:
-        status_filter = st.multiselect(
-            "Profitability", ["Profit", "Breakeven", "Loss", "Unknown"],
-            default=["Profit", "Breakeven", "Loss", "Unknown"],
-        )
-    with f2:
-        gap_filter = st.multiselect(
-            "Spend Alignment", ["Underspend", "On Target", "Overspend"],
-            default=["Underspend", "On Target", "Overspend"],
-        )
-    with f3:
-        direction_filter = st.multiselect(
-            "Direction", ["Scale Up", "Scale Down", "Hold"],
-            default=["Scale Up", "Scale Down", "Hold"],
-        )
-    with f4:
         st.markdown('<br>', unsafe_allow_html=True)
-        excel_bytes = build_excel(sellers)
-        st.download_button("⬇ Export Excel", excel_bytes,
-            f"rebalancing_{run_date}.xlsx",
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            use_container_width=True)
+        r1, r2, r3, r4 = st.columns(4)
+        metric_card(r1, "Budget Freed",    fmt_inr(realloc['total_freed']))
+        metric_card(r2, "Budget Deployed", fmt_inr(realloc['total_deployed']))
+        metric_card(r3, "Net Surplus",     fmt_inr(realloc['net_surplus']))
+        metric_card(r4, "Active Alerts",   str(len(alerts)))
 
-    # ── Build overview rows ─────────────────────────────────
-    overview_rows = []
-    for sid, sdata in sellers.items():
-        plan    = sdata['weekly_plan']
-        camps   = sdata['campaigns']
-        metrics = sdata.get('account_metrics', {})
+        st.markdown(f'<div class="section-title">Campaign Analysis ({len(camps)} campaigns)</div>', unsafe_allow_html=True)
+        df = campaigns_to_df(camps).sort_values('Score', ascending=False)
+        st.dataframe(
+            df, use_container_width=True, hide_index=True,
+            column_config={
+                'Budget':        st.column_config.NumberColumn(format='₹%.0f'),
+                'Rec Budget':    st.column_config.NumberColumn(format='₹%.0f'),
+                'Δ%':            st.column_config.NumberColumn(format='%+.1f%%'),
+                '3D Spend/GMV%': st.column_config.NumberColumn(format='%.2f%%'),
+                'Target%':       st.column_config.NumberColumn(format='%.2f%%'),
+                'Break-even%':   st.column_config.NumberColumn(format='%.2f%%'),
+                'Utilization%':  st.column_config.NumberColumn(format='%.1f%%'),
+                'Score':         st.column_config.ProgressColumn(min_value=0, max_value=100, format='%.0f'),
+            },
+        )
+        dl1, _ = st.columns([1, 5])
+        with dl1:
+            st.download_button("⬇ Export CSV", df.to_csv(index=False).encode('utf-8'),
+                               f"{(seller_name or sid[:12])}_campaigns.csv", "text/csv")
 
-        status, status_cls   = account_status(metrics)
-        gap_lbl, gap_cls     = gap_status(plan['remaining_gap'])
-        direction            = plan['direction']
-
-        if status not in status_filter:       continue
-        if gap_lbl not in gap_filter:         continue
-        if direction not in direction_filter: continue
-
-        n_scale  = sum(1 for c in camps if 'scale_up' in c['action_type'])
-        n_reduce = sum(1 for c in camps if c['action_type'] in ('scale_down','pause','watch_reduce'))
-        n_alerts = len(sdata['alerts'])
-
-        seller_name = sdata.get('seller_name', '')
-        overview_rows.append({
-            '_seller_id':  sid,
-            'Seller':      seller_name or sid[:20],
-            'Seller ID':   sid,
-            'Status':      badge(status, status_cls),
-            'Gap Status':  badge(gap_lbl, gap_cls),
-            'Direction':   direction,
-            'Last Sunday': fmt_inr(plan['last_sunday_spend']),
-            'Target':      fmt_inr(plan['this_week_target']),
-            'Yesterday':   fmt_inr(plan['yesterday_daily_spend']),
-            'Gap':         f"₹{safe_float(plan['remaining_gap']):+,.0f}" if safe_float(plan['remaining_gap']) else '—',
-            'Pace/Day':    f"₹{safe_float(plan['required_daily_pace']):+,.0f}" if safe_float(plan['required_daily_pace']) else '—',
-            'Campaigns':   len(camps),
-            '↑ Scale':     n_scale,
-            '↓ Reduce':    n_reduce,
-            '⚠ Alerts':    n_alerts,
-        })
-
-    st.markdown(f'<div class="row-count">{len(overview_rows)} seller(s) matching filters</div>', unsafe_allow_html=True)
-
-    if not overview_rows:
-        st.info("No sellers match the selected filters.")
-    else:
-        # Render as HTML table for badge support
-        col_order = ['Seller','Status','Gap Status','Direction','Last Sunday','Target','Yesterday','Gap','Pace/Day','Campaigns','↑ Scale','↓ Reduce','⚠ Alerts']
-        header_html = ''.join(f'<th style="padding:8px 12px;text-align:left;background:#f8fafc;border-bottom:2px solid #e2e8f0;font-size:12px;font-weight:700;color:#64748b;white-space:nowrap">{c}</th>' for c in col_order)
-
-        rows_html = ''
-        for row in overview_rows:
-            cells = ''
-            for col in col_order:
-                val = row.get(col, '—')
-                if col == 'Seller':
-                    val = f'<span style="font-weight:600;color:#0f172a">{val}</span>'
-                elif col == '⚠ Alerts' and isinstance(val, int) and val > 0:
-                    val = f'<span style="color:#dc2626;font-weight:700">{val}</span>'
-                cells += f'<td style="padding:10px 12px;border-bottom:1px solid #f1f5f9;font-size:13px;vertical-align:middle">{val}</td>'
-            sid_val = row['_seller_id']
-            rows_html += f'<tr style="cursor:pointer" onclick="window.parent.postMessage({{type:\'streamlit:setComponentValue\',value:\'{sid_val}\'}},\'*\')">{cells}</tr>'
-
-        st.markdown(f"""
-        <div style="overflow-x:auto;border:1px solid #e2e8f0;border-radius:10px;background:white">
-          <table style="width:100%;border-collapse:collapse">
-            <thead><tr>{header_html}</tr></thead>
-            <tbody>{rows_html}</tbody>
-          </table>
-        </div>""", unsafe_allow_html=True)
-
-        # Streamlit-native row selection (since HTML onclick won't work cross-origin)
-        st.markdown('<div class="section-title">Select Seller for Deep Dive</div>', unsafe_allow_html=True)
-        sel_cols = st.columns([3, 1])
-        with sel_cols[0]:
-            selected = st.selectbox(
-                "Select Seller",
-                options=[r['_seller_id'] for r in overview_rows],
-                format_func=lambda x: x,
-                label_visibility="collapsed",
-            )
-        with sel_cols[1]:
-            if st.button("View Details →", use_container_width=True):
-                st.session_state.selected_seller = selected
-                st.rerun()
-
-    # ── Summary charts ──────────────────────────────────────
-    if overview_rows:
-        st.markdown('<div class="section-title">Account Overview</div>', unsafe_allow_html=True)
+    # ── Tab 2: Charts ────────────────────────────────────────
+    with t2:
         ch1, ch2 = st.columns(2)
 
         with ch1:
-            st.markdown("**Gap vs Sunday Target (₹)**")
-            gap_data = []
-            for row in overview_rows:
-                sid = row['_seller_id']
-                g   = safe_float(sellers[sid]['weekly_plan']['remaining_gap'])
-                gap_data.append({'Seller': sid[:18]+'...', 'Gap': g,
-                    'Status': 'Underspend' if (g and g > 500) else ('Overspend' if (g and g < -500) else 'On Target')})
-            fig = px.bar(pd.DataFrame(gap_data), x='Seller', y='Gap', color='Status',
-                color_discrete_map={'Underspend':'#3b82f6','On Target':'#22c55e','Overspend':'#f43f5e'})
-            fig.add_hline(y=0, line_color='#0f172a', line_width=1)
-            fig.update_layout(height=320, paper_bgcolor='white', plot_bgcolor='white',
-                xaxis_tickangle=-40, margin=dict(l=0,r=0,t=10,b=0), showlegend=True)
-            st.plotly_chart(fig, use_container_width=True)
+            st.markdown("#### Budget Movement")
+            valid = [
+                (c.get('campaign_name') or str(c['campaign_id']),
+                 safe_float(c['budget']),
+                 safe_float(c['recommended_budget']),
+                 c['action_type'])
+                for c in camps
+                if safe_float(c['budget']) and safe_float(c['recommended_budget'])
+            ]
+            if valid:
+                # Sort by delta descending (biggest increases first)
+                valid = sorted(valid, key=lambda x: (x[2] or 0) - (x[1] or 0), reverse=True)
+                names = [v[0][:38] for v in valid]
+                curr  = [v[1] for v in valid]
+                rec   = [v[2] for v in valid]
+                deltas = [r - c for r, c in zip(rec, curr)]
+                bar_colors = ['#22c55e' if d > 0 else ('#ef4444' if d < 0 else '#94a3b8') for d in deltas]
+                delta_text = [f"{'+'if d>=0 else ''}₹{d:,.0f}" for d in deltas]
+
+                fig = go.Figure()
+                fig.add_trace(go.Bar(
+                    name='Current Budget', y=names, x=curr, orientation='h',
+                    marker_color='#e2e8f0', marker_line_color='#cbd5e1', marker_line_width=1,
+                ))
+                fig.add_trace(go.Bar(
+                    name='Recommended', y=names, x=rec, orientation='h',
+                    marker_color=bar_colors, opacity=0.85,
+                    text=delta_text, textposition='outside',
+                    textfont=dict(size=10, color='#374151'),
+                ))
+                fig.update_layout(
+                    barmode='overlay',
+                    height=max(360, len(valid) * 40),
+                    xaxis_title='Daily Budget (₹)',
+                    paper_bgcolor='white', plot_bgcolor='#f8fafc',
+                    legend=dict(orientation='h', y=1.06, x=0, font_size=11),
+                    margin=dict(l=0, r=90, t=36, b=0),
+                    font=dict(size=11),
+                    xaxis=dict(gridcolor='#f1f5f9'),
+                )
+                st.plotly_chart(fig, use_container_width=True)
+            else:
+                st.info("No budget data available.")
 
         with ch2:
-            st.markdown("**Profitability Distribution**")
-            status_counts = {}
-            for row in overview_rows:
-                s, _ = account_status(sellers[row['_seller_id']].get('account_metrics', {}))
-                status_counts[s] = status_counts.get(s, 0) + 1
-            fig = px.pie(
-                names=list(status_counts.keys()),
-                values=list(status_counts.values()),
-                color=list(status_counts.keys()),
-                color_discrete_map={'Profit':'#22c55e','Breakeven':'#facc15','Loss':'#ef4444','Unknown':'#9ca3af'},
-                hole=0.5,
+            st.markdown("#### 3D Spend/GMV Efficiency")
+            eff_rows = [
+                {
+                    'Campaign':   (c.get('campaign_name') or str(c['campaign_id']))[:35],
+                    'Spend/GMV%': safe_float(c['ratio_3d']),
+                    'Efficiency': c['efficiency_label'],
+                    'Target':     safe_float(c['target_threshold']),
+                    'Break-even': safe_float(c['be_threshold']),
+                }
+                for c in camps if safe_float(c['ratio_3d']) is not None
+            ]
+            if eff_rows:
+                df_eff = pd.DataFrame(eff_rows).sort_values('Spend/GMV%', ascending=False)
+                color_map = {
+                    'Efficient':                  '#22c55e',
+                    'Acceptable':                 '#84cc16',
+                    'Near Break-even':            '#fb923c',
+                    'Above Break-even':           '#ef4444',
+                    'Severely Above Break-even':  '#7f1d1d',
+                    'No GMV':                     '#374151',
+                    'No Recent Data':             '#9ca3af',
+                    'Unknown':                    '#9ca3af',
+                }
+                fig = px.bar(
+                    df_eff, x='Campaign', y='Spend/GMV%',
+                    color='Efficiency', color_discrete_map=color_map,
+                    hover_data=['Target', 'Break-even'],
+                    text='Spend/GMV%',
+                )
+                # Add threshold reference lines
+                targets = [r['Target'] for r in eff_rows if r['Target']]
+                bes     = [r['Break-even'] for r in eff_rows if r['Break-even']]
+                if targets:
+                    t_val = sum(targets) / len(targets)
+                    fig.add_hline(y=t_val, line_dash='dash', line_color='#16a34a', line_width=1.5,
+                                  annotation_text=f"Avg Target {t_val:.1f}%",
+                                  annotation_position='top right',
+                                  annotation_font=dict(size=10, color='#16a34a'))
+                if bes:
+                    be_val = sum(bes) / len(bes)
+                    fig.add_hline(y=be_val, line_dash='dot', line_color='#dc2626', line_width=1.5,
+                                  annotation_text=f"Avg BE {be_val:.1f}%",
+                                  annotation_position='bottom right',
+                                  annotation_font=dict(size=10, color='#dc2626'))
+                fig.update_traces(texttemplate='%{text:.1f}%', textposition='outside', textfont_size=9)
+                fig.update_layout(
+                    height=max(360, len(eff_rows) * 32),
+                    xaxis_tickangle=-40,
+                    paper_bgcolor='white', plot_bgcolor='#f8fafc',
+                    margin=dict(l=0, r=100, t=36, b=0),
+                    font=dict(size=11),
+                    legend=dict(orientation='h', y=-0.35, font_size=10),
+                    yaxis=dict(gridcolor='#f1f5f9', title='Spend/GMV %'),
+                    xaxis=dict(title=''),
+                )
+                st.plotly_chart(fig, use_container_width=True)
+            else:
+                st.info("No Spend/GMV data available.")
+
+    # ── Tab 3: Alerts & Reallocation ────────────────────────
+    with t3:
+        if alerts:
+            st.markdown(f'<div class="section-title">Risk Alerts ({len(alerts)})</div>', unsafe_allow_html=True)
+            for a in alerts:
+                cls  = {'CRITICAL': 'alert-critical', 'HIGH': 'alert-high', 'MEDIUM': 'alert-medium'}.get(a['priority'], 'alert-medium')
+                icon = {'CRITICAL': '🔴', 'HIGH': '🟠', 'MEDIUM': '🟡'}.get(a['priority'], '⚪')
+                cid  = str(a['campaign_id'])
+                cname = camp_name_lookup.get(cid, cid)
+                display = (f'<span class="alert-name">{cname}</span> '
+                           f'<span class="alert-id">({cid})</span>'
+                           if cname != cid else f'<span class="alert-name">{cid}</span>')
+                st.markdown(f"""
+                <div class="{cls}">
+                  <span class="alert-text">{icon} {display} — {a['message']}</span>
+                </div>""", unsafe_allow_html=True)
+        else:
+            st.success("No risk alerts for this seller.")
+
+        st.markdown('<div class="section-title">Capital Reallocation</div>', unsafe_allow_html=True)
+        rc1, rc2 = st.columns(2)
+        with rc1:
+            st.markdown("**Budget Donors (freed capital)**")
+            if realloc['donors']:
+                donor_df = pd.DataFrame([
+                    {'Campaign': d['campaign_id'], 'Freed': d['freed'], 'Action': d['action']}
+                    for d in realloc['donors']
+                ])
+                st.dataframe(donor_df, hide_index=True, use_container_width=True,
+                             column_config={'Freed': st.column_config.NumberColumn(format='₹%.0f')})
+            else:
+                st.caption("None")
+        with rc2:
+            st.markdown("**Scale Candidates (receiving capital)**")
+            if realloc['scale_candidates']:
+                scale_df = pd.DataFrame([
+                    {'Campaign': s['campaign_id'], 'Added': s['added'], 'Score': s['score']}
+                    for s in realloc['scale_candidates']
+                ])
+                st.dataframe(scale_df, hide_index=True, use_container_width=True,
+                             column_config={'Added': st.column_config.NumberColumn(format='₹%.0f'),
+                                            'Score': st.column_config.ProgressColumn(min_value=0, max_value=100, format='%.0f')})
+            else:
+                st.caption("None")
+
+# ---------------------------------------------------------------------------
+# ALL SELLERS + SUMMARY (tabbed)
+# ---------------------------------------------------------------------------
+
+else:
+    tab_overview, tab_summary = st.tabs(["All Sellers", "Today's Summary"])
+
+    # ════════════════════════════════════════════════════════
+    # TAB 1 — ALL SELLERS OVERVIEW
+    # ════════════════════════════════════════════════════════
+    with tab_overview:
+        f1, f2, f3 = st.columns([2, 2, 2])
+        with f1:
+            status_filter = st.multiselect("Profitability",
+                ["Profit", "Breakeven", "Loss", "Unknown"],
+                default=["Profit", "Breakeven", "Loss", "Unknown"])
+        with f2:
+            gap_filter = st.multiselect("Spend Alignment",
+                ["Underspend", "On Target", "Overspend"],
+                default=["Underspend", "On Target", "Overspend"])
+        with f3:
+            direction_filter = st.multiselect("Direction",
+                ["Scale Up", "Scale Down", "Hold"],
+                default=["Scale Up", "Scale Down", "Hold"])
+
+        overview_rows = []
+        for sid, sdata in sellers.items():
+            plan    = sdata['weekly_plan']
+            camps   = sdata['campaigns']
+            metrics = sdata.get('account_metrics', {})
+
+            status, status_cls = account_status(metrics)
+            gap_lbl, gap_cls   = gap_status(plan['remaining_gap'])
+            direction          = plan['direction']
+
+            if status    not in status_filter:    continue
+            if gap_lbl   not in gap_filter:       continue
+            if direction not in direction_filter: continue
+
+            n_scale  = sum(1 for c in camps if 'scale_up' in c['action_type'])
+            n_reduce = sum(1 for c in camps if c['action_type'] in ('scale_down','pause','watch_reduce'))
+            n_alerts = len(sdata['alerts'])
+            seller_name = sdata.get('seller_name', '')
+
+            overview_rows.append({
+                '_seller_id': sid,
+                'Seller':     seller_name or sid[:20],
+                'Status':     badge(status, status_cls),
+                'Gap Status': badge(gap_lbl, gap_cls),
+                'Direction':  direction,
+                'Last Sunday': fmt_inr(plan['last_sunday_spend']),
+                'Target':      fmt_inr(plan['this_week_target']),
+                'Yesterday':   fmt_inr(plan['yesterday_daily_spend']),
+                'Gap':    f"₹{safe_float(plan['remaining_gap']):+,.0f}" if safe_float(plan['remaining_gap']) else '—',
+                'Pace/Day': f"₹{safe_float(plan['required_daily_pace']):+,.0f}" if safe_float(plan['required_daily_pace']) else '—',
+                'Campaigns': len(camps),
+                '↑ Scale': n_scale,
+                '↓ Reduce': n_reduce,
+                '⚠ Alerts': n_alerts,
+            })
+
+        st.markdown(f'<div class="row-count">{len(overview_rows)} seller(s) matching filters</div>', unsafe_allow_html=True)
+
+        if not overview_rows:
+            st.info("No sellers match the selected filters.")
+        else:
+            col_order = ['Seller','Status','Gap Status','Direction','Last Sunday','Target','Yesterday','Gap','Pace/Day','Campaigns','↑ Scale','↓ Reduce','⚠ Alerts']
+            header_html = ''.join(
+                f'<th style="padding:8px 12px;text-align:left;background:#f8fafc;border-bottom:2px solid #e2e8f0;'
+                f'font-size:12px;font-weight:700;color:#64748b;white-space:nowrap">{c}</th>'
+                for c in col_order
             )
-            fig.update_layout(height=320, paper_bgcolor='white',
-                margin=dict(l=0,r=0,t=10,b=0))
-            st.plotly_chart(fig, use_container_width=True)
+            rows_html = ''
+            for row in overview_rows:
+                cells = ''
+                for col in col_order:
+                    val = row.get(col, '—')
+                    if col == 'Seller':
+                        val = f'<span style="font-weight:600;color:#0f172a">{val}</span>'
+                    elif col == '⚠ Alerts' and isinstance(val, int) and val > 0:
+                        val = f'<span style="color:#dc2626;font-weight:700">{val}</span>'
+                    cells += f'<td style="padding:10px 12px;border-bottom:1px solid #f1f5f9;font-size:13px;vertical-align:middle">{val}</td>'
+                rows_html += f'<tr>{cells}</tr>'
+
+            st.markdown(f"""
+            <div style="overflow-x:auto;border:1px solid #e2e8f0;border-radius:10px;background:white">
+              <table style="width:100%;border-collapse:collapse">
+                <thead><tr>{header_html}</tr></thead>
+                <tbody>{rows_html}</tbody>
+              </table>
+            </div>""", unsafe_allow_html=True)
+
+        if overview_rows:
+            st.markdown('<div class="section-title">Account Overview</div>', unsafe_allow_html=True)
+            oc1, oc2 = st.columns(2)
+            with oc1:
+                st.markdown("**Gap vs Sunday Target (₹)**")
+                gap_data = []
+                for row in overview_rows:
+                    g = safe_float(sellers[row['_seller_id']]['weekly_plan']['remaining_gap'])
+                    gap_data.append({
+                        'Seller': sellers[row['_seller_id']].get('seller_name') or row['_seller_id'][:14],
+                        'Gap': g,
+                        'Status': 'Underspend' if (g and g > 500) else ('Overspend' if (g and g < -500) else 'On Target'),
+                    })
+                fig = px.bar(pd.DataFrame(gap_data), x='Seller', y='Gap', color='Status',
+                    color_discrete_map={'Underspend':'#3b82f6','On Target':'#22c55e','Overspend':'#f43f5e'})
+                fig.add_hline(y=0, line_color='#0f172a', line_width=1)
+                fig.update_layout(height=320, paper_bgcolor='white', plot_bgcolor='#f8fafc',
+                    xaxis_tickangle=-35, margin=dict(l=0,r=0,t=10,b=0),
+                    font=dict(size=11), yaxis=dict(gridcolor='#f1f5f9'))
+                st.plotly_chart(fig, use_container_width=True)
+
+            with oc2:
+                st.markdown("**Profitability Distribution**")
+                status_counts = {}
+                for row in overview_rows:
+                    s, _ = account_status(sellers[row['_seller_id']].get('account_metrics', {}))
+                    status_counts[s] = status_counts.get(s, 0) + 1
+                fig = px.pie(
+                    names=list(status_counts.keys()), values=list(status_counts.values()),
+                    color=list(status_counts.keys()),
+                    color_discrete_map={'Profit':'#22c55e','Breakeven':'#facc15','Loss':'#ef4444','Unknown':'#9ca3af'},
+                    hole=0.52,
+                )
+                fig.update_traces(textinfo='label+percent', textfont_size=12)
+                fig.update_layout(height=320, paper_bgcolor='white',
+                    margin=dict(l=0,r=0,t=10,b=0), showlegend=False)
+                st.plotly_chart(fig, use_container_width=True)
+
+    # ════════════════════════════════════════════════════════
+    # TAB 2 — TODAY'S SUMMARY
+    # ════════════════════════════════════════════════════════
+    with tab_summary:
+
+        # ── KPI strip ─────────────────────────────────────────
+        all_camps = [c for s in sellers.values() for c in s['campaigns']]
+        n_scale_up   = sum(1 for c in all_camps if 'scale_up' in c['action_type'])
+        n_hold       = sum(1 for c in all_camps if c['action_type'] in ('hold','hold_cooldown'))
+        n_reduce     = sum(1 for c in all_camps if c['action_type'] in ('scale_down','watch_reduce'))
+        n_pause      = sum(1 for c in all_camps if c['action_type'] == 'pause')
+        n_alerts_all = sum(len(s['alerts']) for s in sellers.values())
+        total_freed    = sum(s['reallocation']['total_freed']    for s in sellers.values())
+        total_deployed = sum(s['reallocation']['total_deployed'] for s in sellers.values())
+
+        k1, k2, k3, k4, k5, k6 = st.columns(6)
+        k1.markdown(f'<div class="summary-kpi"><div class="sk-label">Scale Up</div><div class="sk-value kpi-green">{n_scale_up}</div><div class="sk-sub">campaigns</div></div>', unsafe_allow_html=True)
+        k2.markdown(f'<div class="summary-kpi"><div class="sk-label">Hold</div><div class="sk-value kpi-blue">{n_hold}</div><div class="sk-sub">campaigns</div></div>', unsafe_allow_html=True)
+        k3.markdown(f'<div class="summary-kpi"><div class="sk-label">Reduce</div><div class="sk-value kpi-amber">{n_reduce}</div><div class="sk-sub">campaigns</div></div>', unsafe_allow_html=True)
+        k4.markdown(f'<div class="summary-kpi"><div class="sk-label">Pause</div><div class="sk-value kpi-red">{n_pause}</div><div class="sk-sub">campaigns</div></div>', unsafe_allow_html=True)
+        k5.markdown(f'<div class="summary-kpi"><div class="sk-label">Budget Freed</div><div class="sk-value kpi-amber">₹{total_freed:,.0f}</div><div class="sk-sub">reallocatable</div></div>', unsafe_allow_html=True)
+        k6.markdown(f'<div class="summary-kpi"><div class="sk-label">Risk Alerts</div><div class="sk-value kpi-red">{n_alerts_all}</div><div class="sk-sub">across all sellers</div></div>', unsafe_allow_html=True)
+
+        st.markdown('<br>', unsafe_allow_html=True)
+
+        # ── Budget utilisation projection ──────────────────────
+        st.markdown('<div class="section-title">Budget Utilisation After Scaling</div>', unsafe_allow_html=True)
+        st.caption("Projected daily spend = each campaign's recommended budget × yesterday's utilisation rate")
+
+        util_rows = []
+        for sid, s in sellers.items():
+            plan  = s['weekly_plan']
+            camps = s['campaigns']
+            curr_budget_total = sum(safe_float(c['budget']) or 0 for c in camps)
+            rec_budget_total  = sum(safe_float(c['recommended_budget']) or 0 for c in camps)
+
+            projected_spend = 0
+            for c in camps:
+                bud = safe_float(c['budget'])
+                rec = safe_float(c['recommended_budget'])
+                yspend = safe_float(c['yesterday_spend'])
+                if bud and bud > 0 and rec and yspend is not None:
+                    util = yspend / bud
+                    projected_spend += rec * util
+
+            target = safe_float(plan['this_week_target']) or 0
+            proj   = round(projected_spend)
+            gap_to_target = proj - target
+
+            util_rows.append({
+                'Seller':              s.get('seller_name') or sid[:18],
+                'Yesterday Spend':     safe_float(plan['yesterday_daily_spend']) or 0,
+                'Current Budget Sum':  round(curr_budget_total),
+                'Rec Budget Sum':      round(rec_budget_total),
+                'Budget Δ':            round(rec_budget_total - curr_budget_total),
+                'Projected Daily':     proj,
+                'Sunday Target':       round(target),
+                'Proj vs Target':      round(gap_to_target),
+            })
+
+        util_df = pd.DataFrame(util_rows).sort_values('Proj vs Target')
+        st.dataframe(
+            util_df, hide_index=True, use_container_width=True,
+            column_config={
+                'Yesterday Spend':    st.column_config.NumberColumn(format='₹%.0f'),
+                'Current Budget Sum': st.column_config.NumberColumn(format='₹%.0f'),
+                'Rec Budget Sum':     st.column_config.NumberColumn(format='₹%.0f'),
+                'Budget Δ':           st.column_config.NumberColumn(format='₹%+.0f'),
+                'Projected Daily':    st.column_config.NumberColumn(format='₹%.0f'),
+                'Sunday Target':      st.column_config.NumberColumn(format='₹%.0f'),
+                'Proj vs Target':     st.column_config.NumberColumn(format='₹%+.0f'),
+            },
+        )
+
+        # Utilisation bar chart
+        util_chart_df = pd.DataFrame([
+            {'Seller': r['Seller'], 'Type': 'Yesterday Spend', 'Amount': r['Yesterday Spend']},
+            {'Seller': r['Seller'], 'Type': 'Projected (Post-Scale)', 'Amount': r['Projected Daily']},
+            {'Seller': r['Seller'], 'Type': 'Sunday Target', 'Amount': r['Sunday Target']},
+        ] for r in util_rows)
+        util_chart_df = util_chart_df.explode('Amount') if isinstance(util_chart_df.iloc[0]['Amount'], list) else pd.concat(
+            [pd.DataFrame([{'Seller': r['Seller'], 'Type': 'Yesterday Spend', 'Amount': r['Yesterday Spend']},
+                           {'Seller': r['Seller'], 'Type': 'Projected (Post-Scale)', 'Amount': r['Projected Daily']},
+                           {'Seller': r['Seller'], 'Type': 'Sunday Target', 'Amount': r['Sunday Target']}])
+             for r in util_rows]
+        )
+        fig = px.bar(util_chart_df, x='Seller', y='Amount', color='Type', barmode='group',
+                     color_discrete_map={
+                         'Yesterday Spend': '#94a3b8',
+                         'Projected (Post-Scale)': '#38bdf8',
+                         'Sunday Target': '#22c55e',
+                     })
+        fig.update_layout(height=340, paper_bgcolor='white', plot_bgcolor='#f8fafc',
+                          xaxis_tickangle=-35, margin=dict(l=0,r=0,t=10,b=0),
+                          legend=dict(orientation='h', y=1.08, font_size=11),
+                          font=dict(size=11), yaxis=dict(gridcolor='#f1f5f9', title='₹ / day'))
+        st.plotly_chart(fig, use_container_width=True)
+
+        # ── Weekly scaling plan ────────────────────────────────
+        st.markdown('<div class="section-title">Weekly Scaling Plan</div>', unsafe_allow_html=True)
+        st.caption("Linear daily ramp from yesterday's spend to Sunday target. Actual application is manual.")
+
+        remaining_days = get_remaining_days()
+        day_labels     = get_day_labels(remaining_days)
+
+        plan_rows = []
+        for sid, s in sellers.items():
+            plan   = s['weekly_plan']
+            y_spnd = safe_float(plan['yesterday_daily_spend']) or 0
+            target = safe_float(plan['this_week_target']) or 0
+            gap    = target - y_spnd
+
+            row = {'Seller': s.get('seller_name') or sid[:18]}
+            for i, day in enumerate(day_labels):
+                # Linear ramp: add gap/remaining_days each day
+                daily_target = y_spnd + (gap / remaining_days) * (i + 1)
+                row[day] = round(daily_target)
+            row['Sunday Target'] = round(target)
+            plan_rows.append(row)
+
+        plan_df = pd.DataFrame(plan_rows)
+        day_col_config = {d: st.column_config.NumberColumn(format='₹%.0f') for d in day_labels}
+        day_col_config['Sunday Target'] = st.column_config.NumberColumn(format='₹%.0f')
+        st.dataframe(plan_df, hide_index=True, use_container_width=True, column_config=day_col_config)
+
+        # Scaling plan chart (line per seller)
+        st.markdown("**Spend Trajectory per Seller**")
+        traj_rows = []
+        for sid, s in sellers.items():
+            plan   = s['weekly_plan']
+            y_spnd = safe_float(plan['yesterday_daily_spend']) or 0
+            target = safe_float(plan['this_week_target']) or 0
+            gap    = target - y_spnd
+            name   = s.get('seller_name') or sid[:14]
+            for i, day in enumerate(day_labels):
+                traj_rows.append({
+                    'Seller': name,
+                    'Day': day,
+                    'Spend': round(y_spnd + (gap / remaining_days) * (i + 1)),
+                })
+        traj_df = pd.DataFrame(traj_rows)
+        fig = px.line(traj_df, x='Day', y='Spend', color='Seller', markers=True)
+        fig.update_layout(height=360, paper_bgcolor='white', plot_bgcolor='#f8fafc',
+                          margin=dict(l=0,r=0,t=10,b=0),
+                          legend=dict(orientation='h', y=-0.25, font_size=10),
+                          font=dict(size=11),
+                          yaxis=dict(gridcolor='#f1f5f9', title='Daily Spend (₹)'),
+                          xaxis=dict(title=''))
+        st.plotly_chart(fig, use_container_width=True)
