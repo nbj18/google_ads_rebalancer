@@ -2,7 +2,7 @@ name: Daily Rebalancing Engine
 
 on:
   schedule:
-    - cron: '30 22 * * *'   # 10:30 PM UTC = 4:00 AM IST
+    - cron: '30 3 * * *'    # 3:30 AM UTC = 9:00 AM IST
   workflow_dispatch:         # allow manual trigger from GitHub UI
 
 jobs:
