@@ -899,17 +899,14 @@ With {rd} day{'s' if rd>1 else ''} to Sunday, the focus should be: **execute sca
         )
 
         # Utilisation bar chart
-        util_chart_df = pd.DataFrame([
-            {'Seller': r['Seller'], 'Type': 'Yesterday Spend', 'Amount': r['Yesterday Spend']},
-            {'Seller': r['Seller'], 'Type': 'Projected (Post-Scale)', 'Amount': r['Projected Daily']},
-            {'Seller': r['Seller'], 'Type': 'Sunday Target', 'Amount': r['Sunday Target']},
-        ] for r in util_rows)
-        util_chart_df = util_chart_df.explode('Amount') if isinstance(util_chart_df.iloc[0]['Amount'], list) else pd.concat(
-            [pd.DataFrame([{'Seller': r['Seller'], 'Type': 'Yesterday Spend', 'Amount': r['Yesterday Spend']},
-                           {'Seller': r['Seller'], 'Type': 'Projected (Post-Scale)', 'Amount': r['Projected Daily']},
-                           {'Seller': r['Seller'], 'Type': 'Sunday Target', 'Amount': r['Sunday Target']}])
-             for r in util_rows]
-        )
+        util_chart_df = pd.concat([
+            pd.DataFrame([
+                {'Seller': r['Seller'], 'Type': 'Yesterday Spend',        'Amount': r['Yesterday Spend']},
+                {'Seller': r['Seller'], 'Type': 'Projected (Post-Scale)', 'Amount': r['Projected Daily']},
+                {'Seller': r['Seller'], 'Type': 'Sunday Target',          'Amount': r['Sunday Target']},
+            ])
+            for r in util_rows
+        ], ignore_index=True)
         fig = px.bar(util_chart_df, x='Seller', y='Amount', color='Type', barmode='group',
                      color_discrete_map={
                          'Yesterday Spend': '#94a3b8',
