@@ -1,0 +1,42 @@
+name: Daily Rebalancing Engine
+
+on:
+  schedule:
+    - cron: '30 22 * * *'   # 10:30 PM UTC = 4:00 AM IST
+  workflow_dispatch:         # allow manual trigger from GitHub UI
+
+jobs:
+  rebalance:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Write service account credentials
+        run: echo '${{ secrets.GOOGLE_SHEETS_CREDENTIALS }}' > woven-scene-497017-a3-580f457aa228.json
+
+      - name: Write .env file
+        run: |
+          echo "METABASE_URL=https://metabase.kaip.in" >> .env
+          echo "METABASE_USERNAME=${{ secrets.METABASE_USERNAME }}" >> .env
+          echo "METABASE_PASSWORD=${{ secrets.METABASE_PASSWORD }}" >> .env
+
+      - name: Run rebalancing engine
+        run: python main.py
+
+      - name: Commit latest_results.json
+        run: |
+          git config user.email "action@github.com"
+          git config user.name "GitHub Actions"
+          git add latest_results.json
+          git diff --staged --quiet || git commit -m "chore: rebalancing results $(date +%Y-%m-%d)"
+          git push
