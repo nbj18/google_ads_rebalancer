@@ -361,6 +361,8 @@ def analyze_seller(seller_id: str, campaigns: list, seller_be: dict,
 
         scored.append({
             'campaign_id':        c.get('campaign_id'),
+            'campaign_name':      c.get('campaign_name') or '',
+            'campaign_status':    c.get('campaign_status') or '',
             'campaign_type':      ctype or 'unknown',
             'budget':             budget,
             'yesterday_spend':    round(y_spend, 2),
@@ -402,6 +404,7 @@ def analyze_seller(seller_id: str, campaigns: list, seller_be: dict,
 
     return {
         'seller_id':        seller_id,
+        'seller_name':      '',   # filled in by run_all_sellers
         'weekly_plan':      plan,
         'campaigns':        scored,
         'alerts':           alerts,
@@ -438,9 +441,12 @@ def run_all_sellers(campaign_df, be_df, targets_df, week_spend_df, history: dict
         cw_spend       = float(week_lookup.get(seller_id, 0) or 0)
         campaigns_list = grp.to_dict('records')
 
-        results[seller_id] = analyze_seller(
+        seller_name = targets.get('seller_name') or ''
+        result = analyze_seller(
             seller_id, campaigns_list, seller_be,
             x, z, cw_spend, history, remaining_days
         )
+        result['seller_name'] = seller_name
+        results[seller_id] = result
 
     return results

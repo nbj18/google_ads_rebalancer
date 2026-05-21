@@ -69,7 +69,8 @@ def build_report_rows(results: dict) -> list:
         realloc = data['reallocation']
 
         # ── Seller header ──────────────────────────────────────────────
-        rows.append([f'━━━ SELLER: {seller_id} ━━━', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''])
+        seller_name = data.get('seller_name') or seller_id
+        rows.append([f'━━━ SELLER: {seller_name} ({seller_id}) ━━━', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''])
         rows.append([])
 
         # ── Weekly planning summary ────────────────────────────────────
@@ -97,7 +98,7 @@ def build_report_rows(results: dict) -> list:
         # ── Campaign rebalancing table ─────────────────────────────────
         rows.append(['CAMPAIGN ANALYSIS'])
         rows.append([
-            'Campaign ID', 'Type',
+            'Campaign ID', 'Campaign Name', 'Status', 'Type',
             'Budget', 'Yesterday Spend', 'Utilization',
             '3D Spend', '3D GMV', '3D Spend/GMV',
             '7D Spend', '7D GMV', '7D Spend/GMV',
@@ -110,6 +111,8 @@ def build_report_rows(results: dict) -> list:
         for c in sorted(campaigns, key=lambda x: x['rebalancing_score'], reverse=True):
             rows.append([
                 c['campaign_id'],
+                c.get('campaign_name', ''),
+                c.get('campaign_status', ''),
                 c['campaign_type'],
                 _fmt(c['budget']),
                 _fmt(c['yesterday_spend']),

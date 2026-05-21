@@ -1,23 +1,26 @@
 {
-  "run_date": "2026-05-21",
+  "run_date": "2026-05-22",
   "sellers": {
     "639710de480a9d5c847e3c8c": {
       "seller_id": "639710de480a9d5c847e3c8c",
+      "seller_name": "SHOPDROP",
       "weekly_plan": {
         "last_sunday_spend": 7582.0,
         "this_week_target": 9000.0,
         "yesterday_daily_spend": 8396.91,
         "current_week_spend": 25564.6,
         "remaining_gap": 603.09,
-        "required_daily_pace": 150.77,
+        "required_daily_pace": 201.03,
         "existing_capacity": 709.0,
         "new_structure_req": 709.0,
-        "remaining_days": 4,
+        "remaining_days": 3,
         "direction": "Scale Up"
       },
       "campaigns": [
         {
           "campaign_id": "23695625244",
+          "campaign_name": "Demand Gen_VIDEOS_28-03-2026",
+          "campaign_status": "PAUSED",
           "campaign_type": "demand_gen",
           "budget": 1000.0,
           "yesterday_spend": 1438.33,
@@ -64,6 +67,8 @@
         },
         {
           "campaign_id": "23739421375",
+          "campaign_name": "Demand Gen_videos_08-04-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 570.0,
           "yesterday_spend": 571.9,
@@ -110,6 +115,8 @@
         },
         {
           "campaign_id": "23848886860",
+          "campaign_name": "DG | CRT | 13/05",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 500.0,
           "yesterday_spend": 190.27,
@@ -156,6 +163,8 @@
         },
         {
           "campaign_id": "23287808289",
+          "campaign_name": "Women Elegance | Top 3 BS Pmax Banners | 23/11/25",
+          "campaign_status": "PAUSED",
           "campaign_type": "pmax_banner",
           "budget": 480.0,
           "yesterday_spend": 486.41,
@@ -202,6 +211,8 @@
         },
         {
           "campaign_id": "23639469516",
+          "campaign_name": "SHOPDROP | pmax banners | 11-03-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 1800.0,
           "yesterday_spend": 1798.21,
@@ -248,6 +259,8 @@
         },
         {
           "campaign_id": "23700984230",
+          "campaign_name": "PMAX_BANNERS_28-03-2026 #2",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 550.0,
           "yesterday_spend": 572.11,
@@ -294,6 +307,8 @@
         },
         {
           "campaign_id": "23705666119",
+          "campaign_name": "PMAX_BANNERS_28-03-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 570.0,
           "yesterday_spend": 572.87,
@@ -340,6 +355,8 @@
         },
         {
           "campaign_id": "23752751270",
+          "campaign_name": "pmax_banner+aivideo_14-04-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 600.0,
           "yesterday_spend": 669.46,
@@ -386,6 +403,8 @@
         },
         {
           "campaign_id": "23821941774",
+          "campaign_name": "pmax_PKR1_3/30/04/2026 #2",
+          "campaign_status": "PAUSED",
           "campaign_type": "pmax_banner",
           "budget": NaN,
           "yesterday_spend": 0.0,
@@ -432,6 +451,8 @@
         },
         {
           "campaign_id": "23848370364",
+          "campaign_name": "PKR | SP | 16/05",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 750.0,
           "yesterday_spend": 8.06,
@@ -478,6 +499,8 @@
         },
         {
           "campaign_id": "23858022202",
+          "campaign_name": "pmax_banners_16-05-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 800.0,
           "yesterday_spend": 762.06,
@@ -524,6 +547,8 @@
         },
         {
           "campaign_id": "23553492867",
+          "campaign_name": "Pmax_Feed_ Allproduct_1202|PMAX Feed Only |2026-02-12T14:13:53.382Z",
+          "campaign_status": "PAUSED",
           "campaign_type": "pmax_feed",
           "budget": 480.0,
           "yesterday_spend": 459.87,
@@ -570,6 +595,8 @@
         },
         {
           "campaign_id": "23757521740",
+          "campaign_name": "pmax_feed_14-04-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_feed",
           "budget": 550.0,
           "yesterday_spend": 23.91,
@@ -616,6 +643,8 @@
         },
         {
           "campaign_id": "23858050048",
+          "campaign_name": "Shopping_16-05-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "shopping",
           "budget": 800.0,
           "yesterday_spend": 843.45,
@@ -783,21 +812,24 @@
     },
     "65b4f58d99fbb4d8acfed471": {
       "seller_id": "65b4f58d99fbb4d8acfed471",
+      "seller_name": "Bell Butta",
       "weekly_plan": {
         "last_sunday_spend": 21403.0,
         "this_week_target": 10000.0,
         "yesterday_daily_spend": 15522.55,
         "current_week_spend": 48677.35,
         "remaining_gap": -5522.55,
-        "required_daily_pace": -1380.64,
+        "required_daily_pace": -1840.85,
         "existing_capacity": -5701.5,
         "new_structure_req": -5701.5,
-        "remaining_days": 4,
+        "remaining_days": 3,
         "direction": "Scale Down"
       },
       "campaigns": [
         {
           "campaign_id": "23611295446",
+          "campaign_name": "Demand Gen \u2013Video-27-02-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 2880.0,
           "yesterday_spend": 53.52,
@@ -844,6 +876,8 @@
         },
         {
           "campaign_id": "23630862447",
+          "campaign_name": "Demand Gen \u2013Video-09-03-2026",
+          "campaign_status": "PAUSED",
           "campaign_type": "demand_gen",
           "budget": 960.0,
           "yesterday_spend": 186.81,
@@ -890,6 +924,8 @@
         },
         {
           "campaign_id": "23762132856",
+          "campaign_name": "DG|CR1|4-1|18/04",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 3000.0,
           "yesterday_spend": 1468.76,
@@ -936,6 +972,8 @@
         },
         {
           "campaign_id": "23800439726",
+          "campaign_name": "DG | CRT - R | 1 - 1 | 28/04",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 480.0,
           "yesterday_spend": 494.19,
@@ -982,6 +1020,8 @@
         },
         {
           "campaign_id": "23833390031",
+          "campaign_name": "CRT-R",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 500.0,
           "yesterday_spend": 477.71,
@@ -1028,6 +1068,8 @@
         },
         {
           "campaign_id": "23390726847",
+          "campaign_name": "PMax-Banner-Top 3 Profitable Pdts-24/12",
+          "campaign_status": "PAUSED",
           "campaign_type": "pmax_banner",
           "budget": 2880.0,
           "yesterday_spend": 2690.13,
@@ -1074,6 +1116,8 @@
         },
         {
           "campaign_id": "23726049072",
+          "campaign_name": "pmax_banners_07-04-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 1920.0,
           "yesterday_spend": 1864.28,
@@ -1120,6 +1164,8 @@
         },
         {
           "campaign_id": "23811130294",
+          "campaign_name": "PMAX_BANNER+AIVIDEO_30-04-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 800.0,
           "yesterday_spend": 776.92,
@@ -1166,6 +1212,8 @@
         },
         {
           "campaign_id": "23824214620",
+          "campaign_name": "PMAX_BANNERS_05-05-2026 #2",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 800.0,
           "yesterday_spend": 699.33,
@@ -1212,6 +1260,8 @@
         },
         {
           "campaign_id": "23625900716",
+          "campaign_name": "PMAX_FEED ONLY_05-03-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_feed",
           "budget": 4900.0,
           "yesterday_spend": 4401.36,
@@ -1258,6 +1308,8 @@
         },
         {
           "campaign_id": "23835889194",
+          "campaign_name": "SHOPPING_12-05-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "shopping",
           "budget": 1000.0,
           "yesterday_spend": 1073.6,
@@ -1304,6 +1356,8 @@
         },
         {
           "campaign_id": "23853610697",
+          "campaign_name": "Shopping | ML | Top 105 BS | 16/05",
+          "campaign_status": "ENABLED",
           "campaign_type": "shopping",
           "budget": 1250.0,
           "yesterday_spend": 1335.94,
@@ -1446,21 +1500,24 @@
     },
     "65ec51a75361e8ae70b8740a": {
       "seller_id": "65ec51a75361e8ae70b8740a",
+      "seller_name": "Sanwariya Jewellers",
       "weekly_plan": {
         "last_sunday_spend": 9519.0,
         "this_week_target": 13000.0,
         "yesterday_daily_spend": 7172.86,
         "current_week_spend": 26177.81,
         "remaining_gap": 5827.14,
-        "required_daily_pace": 1456.78,
+        "required_daily_pace": 1942.38,
         "existing_capacity": 1740.5,
         "new_structure_req": 1740.5,
-        "remaining_days": 4,
+        "remaining_days": 3,
         "direction": "Scale Up"
       },
       "campaigns": [
         {
           "campaign_id": "23392411424",
+          "campaign_name": "Pmax_allProducts_23-11",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 13000.0,
           "yesterday_spend": 2777.78,
@@ -1507,6 +1564,8 @@
         },
         {
           "campaign_id": "23801154666",
+          "campaign_name": "PMAX_BANNERS_30-04-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 1700.0,
           "yesterday_spend": 1813.17,
@@ -1553,6 +1612,8 @@
         },
         {
           "campaign_id": "23829487370",
+          "campaign_name": "PKR | SP | 08/05",
+          "campaign_status": "PAUSED",
           "campaign_type": "pmax_banner",
           "budget": NaN,
           "yesterday_spend": 0.0,
@@ -1599,6 +1660,8 @@
         },
         {
           "campaign_id": "23833962634",
+          "campaign_name": "PKR | SP | 02| 08/05",
+          "campaign_status": "PAUSED",
           "campaign_type": "pmax_banner",
           "budget": NaN,
           "yesterday_spend": 0.0,
@@ -1645,6 +1708,8 @@
         },
         {
           "campaign_id": "23801232867",
+          "campaign_name": "PMAX_FEED_30-04-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_feed",
           "budget": 2200.0,
           "yesterday_spend": 1694.47,
@@ -1691,6 +1756,8 @@
         },
         {
           "campaign_id": "23848302846",
+          "campaign_name": "Shopping | RL | Top 21 BS | 16/05",
+          "campaign_status": "ENABLED",
           "campaign_type": "shopping",
           "budget": 1000.0,
           "yesterday_spend": 172.87,
@@ -1737,6 +1804,8 @@
         },
         {
           "campaign_id": "23858056792",
+          "campaign_name": "Shopping_16-05-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "shopping",
           "budget": 1000.0,
           "yesterday_spend": 714.57,
@@ -1838,21 +1907,24 @@
     },
     "66079a7e654ec300b9f9a0d3": {
       "seller_id": "66079a7e654ec300b9f9a0d3",
+      "seller_name": "jaipurstyle",
       "weekly_plan": {
         "last_sunday_spend": 17426.0,
         "this_week_target": 17000.0,
         "yesterday_daily_spend": 17548.85,
         "current_week_spend": 54074.21,
         "remaining_gap": -548.85,
-        "required_daily_pace": -137.21,
+        "required_daily_pace": -182.95,
         "existing_capacity": -213.0,
         "new_structure_req": -213.0,
-        "remaining_days": 4,
+        "remaining_days": 3,
         "direction": "Scale Down"
       },
       "campaigns": [
         {
           "campaign_id": "23084767642",
+          "campaign_name": "Demand_gen_24/09-Copy 03/10",
+          "campaign_status": "PAUSED",
           "campaign_type": "demand_gen",
           "budget": 1152.0,
           "yesterday_spend": 521.57,
@@ -1899,6 +1971,8 @@
         },
         {
           "campaign_id": "23824931502",
+          "campaign_name": "Demand Gen CRT-R - 2026-05-08",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 500.0,
           "yesterday_spend": 78.26,
@@ -1945,6 +2019,8 @@
         },
         {
           "campaign_id": "23834793805",
+          "campaign_name": "Demand Gen CRT-R - 08/05/2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 600.0,
           "yesterday_spend": 223.9,
@@ -1991,6 +2067,8 @@
         },
         {
           "campaign_id": "23849036626",
+          "campaign_name": "DG | CRI | 13/05",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 600.0,
           "yesterday_spend": 226.88,
@@ -2037,6 +2115,8 @@
         },
         {
           "campaign_id": "23560873610",
+          "campaign_name": "PmaxBanner_TopSelling_1302",
+          "campaign_status": "PAUSED",
           "campaign_type": "pmax_banner",
           "budget": 1000.0,
           "yesterday_spend": 1077.73,
@@ -2083,6 +2163,8 @@
         },
         {
           "campaign_id": "23679692851",
+          "campaign_name": "PMAX_BANNER+AIVIDEO_20-03-2026",
+          "campaign_status": "PAUSED",
           "campaign_type": "pmax_banner",
           "budget": 3000.0,
           "yesterday_spend": 2989.34,
@@ -2129,6 +2211,8 @@
         },
         {
           "campaign_id": "23709456877",
+          "campaign_name": "PMAX_BANNERS_30-03-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 720.0,
           "yesterday_spend": 732.52,
@@ -2175,6 +2259,8 @@
         },
         {
           "campaign_id": "23735493586",
+          "campaign_name": "PMAX_BANNER+AIVIDEO_20-03-2026 #2",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 1000.0,
           "yesterday_spend": 661.75,
@@ -2221,6 +2307,8 @@
         },
         {
           "campaign_id": "23743109977",
+          "campaign_name": "PMAX_BANNER+AIVIDEO_20-03-2026 #3",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 1440.0,
           "yesterday_spend": 1275.28,
@@ -2267,6 +2355,8 @@
         },
         {
           "campaign_id": "23758253653",
+          "campaign_name": "pmax_banners+videos_14-04-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 2400.0,
           "yesterday_spend": 2442.23,
@@ -2313,6 +2403,8 @@
         },
         {
           "campaign_id": "23779177881",
+          "campaign_name": "pmax_banners_23-04-2026 #2",
+          "campaign_status": "PAUSED",
           "campaign_type": "pmax_banner",
           "budget": NaN,
           "yesterday_spend": 0.0,
@@ -2359,6 +2451,8 @@
         },
         {
           "campaign_id": "23784482381",
+          "campaign_name": "pmax_banners_23-04-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 1200.0,
           "yesterday_spend": 1064.83,
@@ -2405,6 +2499,8 @@
         },
         {
           "campaign_id": "23812374361",
+          "campaign_name": "PKR1_1/30/04/2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 500.0,
           "yesterday_spend": 46.75,
@@ -2451,6 +2547,8 @@
         },
         {
           "campaign_id": "23833867858",
+          "campaign_name": "PKR | SP | 08/05",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 500.0,
           "yesterday_spend": 135.58,
@@ -2497,6 +2595,8 @@
         },
         {
           "campaign_id": "23856043573",
+          "campaign_name": "PMAX_BANNER_15-05-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 1000.0,
           "yesterday_spend": 1470.52,
@@ -2543,6 +2643,8 @@
         },
         {
           "campaign_id": "23771479349",
+          "campaign_name": "pmax_feed_20-04-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_feed",
           "budget": 1200.0,
           "yesterday_spend": 835.95,
@@ -2589,6 +2691,8 @@
         },
         {
           "campaign_id": "23846252580",
+          "campaign_name": "pmax_feed_15-05-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_feed",
           "budget": 1000.0,
           "yesterday_spend": 1932.87,
@@ -2635,6 +2739,8 @@
         },
         {
           "campaign_id": "23858053405",
+          "campaign_name": "Shopping | RL | Top 101 BS | 16/05",
+          "campaign_status": "ENABLED",
           "campaign_type": "shopping",
           "budget": 2000.0,
           "yesterday_spend": 1832.89,
@@ -2812,21 +2918,24 @@
     },
     "667bc397c6928cd9c9f22f70": {
       "seller_id": "667bc397c6928cd9c9f22f70",
+      "seller_name": "Colours lifestyle",
       "weekly_plan": {
         "last_sunday_spend": 3915.0,
         "this_week_target": 3000.0,
         "yesterday_daily_spend": 3027.56,
         "current_week_spend": 9950.8,
         "remaining_gap": -27.56,
-        "required_daily_pace": -6.89,
+        "required_daily_pace": -9.19,
         "existing_capacity": -457.5,
         "new_structure_req": -457.5,
-        "remaining_days": 4,
+        "remaining_days": 3,
         "direction": "Scale Down"
       },
       "campaigns": [
         {
           "campaign_id": "23437062176",
+          "campaign_name": "DXT | Demand Gen AI Video Campaign | 07/01/2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 500.0,
           "yesterday_spend": 191.84,
@@ -2873,6 +2982,8 @@
         },
         {
           "campaign_id": "23667919853",
+          "campaign_name": "PMAX_BANNERS_18-03-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 860.0,
           "yesterday_spend": 736.07,
@@ -2919,6 +3030,8 @@
         },
         {
           "campaign_id": "23807714875",
+          "campaign_name": "PMAX_BANNERS_29-04-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 900.0,
           "yesterday_spend": 873.38,
@@ -2965,6 +3078,8 @@
         },
         {
           "campaign_id": "23759646420",
+          "campaign_name": "PMAX+FEED_17-04-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_feed",
           "budget": 720.0,
           "yesterday_spend": 721.61,
@@ -3011,6 +3126,8 @@
         },
         {
           "campaign_id": "23848542120",
+          "campaign_name": "Shopping | ML | Top 8 BS | 16/05",
+          "campaign_status": "ENABLED",
           "campaign_type": "shopping",
           "budget": 500.0,
           "yesterday_spend": 504.66,
@@ -3098,21 +3215,24 @@
     },
     "678f879dff691502f981d9d8": {
       "seller_id": "678f879dff691502f981d9d8",
+      "seller_name": "Theodore Watches",
       "weekly_plan": {
         "last_sunday_spend": 7779.0,
         "this_week_target": 8000.0,
         "yesterday_daily_spend": 5722.45,
         "current_week_spend": 19708.3,
         "remaining_gap": 2277.55,
-        "required_daily_pace": 569.39,
+        "required_daily_pace": 759.18,
         "existing_capacity": 110.5,
         "new_structure_req": 110.5,
-        "remaining_days": 4,
+        "remaining_days": 3,
         "direction": "Scale Up"
       },
       "campaigns": [
         {
           "campaign_id": "23606047889",
+          "campaign_name": "Demand Gen | Video | 27/02/26",
+          "campaign_status": "PAUSED",
           "campaign_type": "demand_gen",
           "budget": 600.0,
           "yesterday_spend": 623.57,
@@ -3159,6 +3279,8 @@
         },
         {
           "campaign_id": "23757952780",
+          "campaign_name": "Demand Gen_VIDEOS_14-04-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 680.0,
           "yesterday_spend": 688.15,
@@ -3205,6 +3327,8 @@
         },
         {
           "campaign_id": "23835332383",
+          "campaign_name": "DG|  CRT-R | 1-1 |23/04 #2",
+          "campaign_status": "PAUSED",
           "campaign_type": "demand_gen",
           "budget": NaN,
           "yesterday_spend": 0.0,
@@ -3251,6 +3375,8 @@
         },
         {
           "campaign_id": "23624148607",
+          "campaign_name": "Pmax Banner | 03/03/26",
+          "campaign_status": "PAUSED",
           "campaign_type": "pmax_banner",
           "budget": NaN,
           "yesterday_spend": 0.0,
@@ -3297,6 +3423,8 @@
         },
         {
           "campaign_id": "23637637595",
+          "campaign_name": "Pmax Banner | 09/03/26",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 1000.0,
           "yesterday_spend": 1055.15,
@@ -3343,6 +3471,8 @@
         },
         {
           "campaign_id": "23710701579",
+          "campaign_name": "PMAX_BANNERS_02-04-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 3000.0,
           "yesterday_spend": 2983.96,
@@ -3389,6 +3519,8 @@
         },
         {
           "campaign_id": "23780170049",
+          "campaign_name": "Theodore Watch Store| Pmax Banner and Video Campaign | 22-04-2026",
+          "campaign_status": "PAUSED",
           "campaign_type": "pmax_banner",
           "budget": NaN,
           "yesterday_spend": 0.0,
@@ -3435,6 +3567,8 @@
         },
         {
           "campaign_id": "23831765425",
+          "campaign_name": "PKR1_1/30/04/2026 #2",
+          "campaign_status": "PAUSED",
           "campaign_type": "pmax_banner",
           "budget": NaN,
           "yesterday_spend": 0.0,
@@ -3481,6 +3615,8 @@
         },
         {
           "campaign_id": "23595147757",
+          "campaign_name": "Pmax_feed_23/02/26",
+          "campaign_status": "PAUSED",
           "campaign_type": "pmax_feed",
           "budget": 500.0,
           "yesterday_spend": 0.0,
@@ -3527,6 +3663,8 @@
         },
         {
           "campaign_id": "23753394851",
+          "campaign_name": "pmax_feed_14-04-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_feed",
           "budget": 560.0,
           "yesterday_spend": 371.62,
@@ -3573,6 +3711,8 @@
         },
         {
           "campaign_id": "23848322841",
+          "campaign_name": "Shopping | RL | Top 20 BS | 16/05",
+          "campaign_status": "ENABLED",
           "campaign_type": "shopping",
           "budget": 1000.0,
           "yesterday_spend": 0.0,
@@ -3700,21 +3840,24 @@
     },
     "67c953745d0ee4b8786f370a": {
       "seller_id": "67c953745d0ee4b8786f370a",
+      "seller_name": "Nayra enterprises",
       "weekly_plan": {
         "last_sunday_spend": 169860.0,
         "this_week_target": 150000.0,
         "yesterday_daily_spend": 138267.07,
         "current_week_spend": 454945.76,
         "remaining_gap": 11732.93,
-        "required_daily_pace": 2933.23,
+        "required_daily_pace": 3910.98,
         "existing_capacity": -9930.0,
         "new_structure_req": -9930.0,
-        "remaining_days": 4,
+        "remaining_days": 3,
         "direction": "Scale Down"
       },
       "campaigns": [
         {
           "campaign_id": "23733220923",
+          "campaign_name": "Demand Gen_VIDEOS_09-04-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 4500.0,
           "yesterday_spend": 4598.24,
@@ -3761,6 +3904,8 @@
         },
         {
           "campaign_id": "23772345991",
+          "campaign_name": "DG|CR1|4-1|18/04",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 7000.0,
           "yesterday_spend": 7137.88,
@@ -3807,6 +3952,8 @@
         },
         {
           "campaign_id": "23780510130",
+          "campaign_name": "DG|  CRT1 | 3-3 |23/04",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 1800.0,
           "yesterday_spend": 1781.01,
@@ -3853,6 +4000,8 @@
         },
         {
           "campaign_id": "23785783346",
+          "campaign_name": "DG|  CRT1 | 4-1 |23/04",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 3100.0,
           "yesterday_spend": 3201.51,
@@ -3899,6 +4048,8 @@
         },
         {
           "campaign_id": "23785792259",
+          "campaign_name": "DG|  CRT1 | 3-2 |23/04",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 4704.0,
           "yesterday_spend": 4714.36,
@@ -3945,6 +4096,8 @@
         },
         {
           "campaign_id": "23800692470",
+          "campaign_name": "DG | CRT - R | 1-1 | 28-04",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 720.0,
           "yesterday_spend": 738.92,
@@ -3991,6 +4144,8 @@
         },
         {
           "campaign_id": "23833540748",
+          "campaign_name": "CRT-R| 09-05-2026",
+          "campaign_status": "PAUSED",
           "campaign_type": "demand_gen",
           "budget": NaN,
           "yesterday_spend": 0.0,
@@ -4037,6 +4192,8 @@
         },
         {
           "campaign_id": "23842555089",
+          "campaign_name": "DG | CRT | 14/05",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 500.0,
           "yesterday_spend": 137.24,
@@ -4083,6 +4240,8 @@
         },
         {
           "campaign_id": "23847864959",
+          "campaign_name": "DG 1 | CRT | 14/05",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 500.0,
           "yesterday_spend": 184.33,
@@ -4129,6 +4288,8 @@
         },
         {
           "campaign_id": "23868847330",
+          "campaign_name": "Demand Gen_VIDEOS_20-05-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 1500.0,
           "yesterday_spend": 44.21,
@@ -4175,6 +4336,8 @@
         },
         {
           "campaign_id": "23868849265",
+          "campaign_name": "Demand Gen_VIDEOS_20-05-2026 #2",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 1500.0,
           "yesterday_spend": 272.66,
@@ -4221,6 +4384,8 @@
         },
         {
           "campaign_id": "23566056703",
+          "campaign_name": "Pmax | Banner | 5BS | 13Feb26",
+          "campaign_status": "PAUSED",
           "campaign_type": "pmax_banner",
           "budget": 1920.0,
           "yesterday_spend": 1747.38,
@@ -4267,6 +4432,8 @@
         },
         {
           "campaign_id": "23579185900",
+          "campaign_name": "Jaipuri Kurta | Pmax Banner Campaign On Top 6-10 BS | 17/02/2026",
+          "campaign_status": "PAUSED",
           "campaign_type": "pmax_banner",
           "budget": 3000.0,
           "yesterday_spend": 3086.23,
@@ -4313,6 +4480,8 @@
         },
         {
           "campaign_id": "23625025892",
+          "campaign_name": "Pmax | Banner + VIDEO | 05-03-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 25000.0,
           "yesterday_spend": 26711.63,
@@ -4359,6 +4528,8 @@
         },
         {
           "campaign_id": "23648557385",
+          "campaign_name": "Pmax | Banner | 12-03-2026",
+          "campaign_status": "PAUSED",
           "campaign_type": "pmax_banner",
           "budget": 2100.0,
           "yesterday_spend": 2236.89,
@@ -4405,6 +4576,8 @@
         },
         {
           "campaign_id": "23708277830",
+          "campaign_name": "Pmax | Banner + VIDEO | 05-03-2026 #2",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 32000.0,
           "yesterday_spend": 26284.77,
@@ -4451,6 +4624,8 @@
         },
         {
           "campaign_id": "23729295252",
+          "campaign_name": "Pmax | Banner + VIDEO | 05-03-2026 #3",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 2000.0,
           "yesterday_spend": 1865.64,
@@ -4497,6 +4672,8 @@
         },
         {
           "campaign_id": "23732184661",
+          "campaign_name": "pmax_banners_06-04-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 2500.0,
           "yesterday_spend": 3357.38,
@@ -4543,6 +4720,8 @@
         },
         {
           "campaign_id": "23734535663",
+          "campaign_name": "Pmax | Banner + VIDEO | 05-03-2026 #4",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 6000.0,
           "yesterday_spend": 5032.65,
@@ -4589,6 +4768,8 @@
         },
         {
           "campaign_id": "23734731731",
+          "campaign_name": "Pmax | Banner + VIDEO | 05-03-2026 #7",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 1600.0,
           "yesterday_spend": 1635.06,
@@ -4635,6 +4816,8 @@
         },
         {
           "campaign_id": "23738456306",
+          "campaign_name": "PMAX_BANNERS_GBS_09-04-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 3600.0,
           "yesterday_spend": 2157.64,
@@ -4681,6 +4864,8 @@
         },
         {
           "campaign_id": "23739340258",
+          "campaign_name": "Pmax | Banner + VIDEO | 05-03-2026 #6",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 3600.0,
           "yesterday_spend": 2973.58,
@@ -4727,6 +4912,8 @@
         },
         {
           "campaign_id": "23789329343",
+          "campaign_name": "pmax_banner+video_24-04-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 2400.0,
           "yesterday_spend": 1457.22,
@@ -4773,6 +4960,8 @@
         },
         {
           "campaign_id": "23789445554",
+          "campaign_name": "pmax_banners_24-04-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 1200.0,
           "yesterday_spend": 863.76,
@@ -4819,6 +5008,8 @@
         },
         {
           "campaign_id": "23793962815",
+          "campaign_name": "pmax_banner+video_24-04-2026 #2",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 2560.0,
           "yesterday_spend": 2711.01,
@@ -4865,6 +5056,8 @@
         },
         {
           "campaign_id": "23794031425",
+          "campaign_name": "pmax_banners_24-04-2026 #2",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 4000.0,
           "yesterday_spend": 3994.49,
@@ -4911,6 +5104,8 @@
         },
         {
           "campaign_id": "23794066219",
+          "campaign_name": "pmax_banners_24-04-2026 #3",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 1200.0,
           "yesterday_spend": 1246.84,
@@ -4957,6 +5152,8 @@
         },
         {
           "campaign_id": "23812322335",
+          "campaign_name": "PKR1_1/30/04/2026",
+          "campaign_status": "PAUSED",
           "campaign_type": "pmax_banner",
           "budget": NaN,
           "yesterday_spend": 0.0,
@@ -5003,6 +5200,8 @@
         },
         {
           "campaign_id": "23828006308",
+          "campaign_name": "Pmax banner+AIvideos_selected states_06-05-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 2500.0,
           "yesterday_spend": 1616.66,
@@ -5049,6 +5248,8 @@
         },
         {
           "campaign_id": "23835707931",
+          "campaign_name": "Pmax | Banner + VIDEO | 12-05-2026 #8",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 1500.0,
           "yesterday_spend": 1576.03,
@@ -5095,6 +5296,8 @@
         },
         {
           "campaign_id": "23838017706",
+          "campaign_name": "PMAX_BANNERS_13-05-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 2500.0,
           "yesterday_spend": 2514.16,
@@ -5141,6 +5344,8 @@
         },
         {
           "campaign_id": "23853848351",
+          "campaign_name": "PKR | MP | 16/05",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 1000.0,
           "yesterday_spend": 841.68,
@@ -5187,6 +5392,8 @@
         },
         {
           "campaign_id": "23864505572",
+          "campaign_name": "PMAX_BANNERS_20-05-2026#2",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 1500.0,
           "yesterday_spend": 918.34,
@@ -5233,6 +5440,8 @@
         },
         {
           "campaign_id": "23868926302",
+          "campaign_name": "PMAX_BANNERS_20-05-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 1500.0,
           "yesterday_spend": 491.47,
@@ -5279,6 +5488,8 @@
         },
         {
           "campaign_id": "23459920947",
+          "campaign_name": "Pmax_Feed_16Jan",
+          "campaign_status": "PAUSED",
           "campaign_type": "pmax_feed",
           "budget": 4000.0,
           "yesterday_spend": 2658.33,
@@ -5325,6 +5536,8 @@
         },
         {
           "campaign_id": "23619568212",
+          "campaign_name": "Pmax_Feed_05-03-2026",
+          "campaign_status": "PAUSED",
           "campaign_type": "pmax_feed",
           "budget": 4500.0,
           "yesterday_spend": 4366.43,
@@ -5371,6 +5584,8 @@
         },
         {
           "campaign_id": "23793858130",
+          "campaign_name": "pmax_feed_24-04-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_feed",
           "budget": 6000.0,
           "yesterday_spend": 4261.18,
@@ -5417,6 +5632,8 @@
         },
         {
           "campaign_id": "23838123498",
+          "campaign_name": "PMAX_FEED_M+T1_13-05-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_feed",
           "budget": 1000.0,
           "yesterday_spend": 1861.72,
@@ -5463,6 +5680,8 @@
         },
         {
           "campaign_id": "23840603711",
+          "campaign_name": "SEARCH_12-05-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "search",
           "budget": 3600.0,
           "yesterday_spend": 2697.18,
@@ -5509,6 +5728,8 @@
         },
         {
           "campaign_id": "23811433570",
+          "campaign_name": "SHOPPING_30-04-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "shopping",
           "budget": 2000.0,
           "yesterday_spend": 2861.75,
@@ -5555,6 +5776,8 @@
         },
         {
           "campaign_id": "23848187940",
+          "campaign_name": "Shopping | RL | Top 83 BS | 16/05",
+          "campaign_status": "ENABLED",
           "campaign_type": "shopping",
           "budget": 1400.0,
           "yesterday_spend": 1429.61,
@@ -5787,21 +6010,24 @@
     },
     "6839945d72a04e21d271bacc": {
       "seller_id": "6839945d72a04e21d271bacc",
+      "seller_name": "Daizymart",
       "weekly_plan": {
         "last_sunday_spend": 13583.0,
         "this_week_target": 15000.0,
         "yesterday_daily_spend": 13941.38,
         "current_week_spend": 43910.49,
         "remaining_gap": 1058.62,
-        "required_daily_pace": 264.65,
+        "required_daily_pace": 352.87,
         "existing_capacity": 708.5,
         "new_structure_req": 708.5,
-        "remaining_days": 4,
+        "remaining_days": 3,
         "direction": "Scale Up"
       },
       "campaigns": [
         {
           "campaign_id": "23408746477",
+          "campaign_name": "DG_WithoutFeed 28/12",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 1500.0,
           "yesterday_spend": 1535.43,
@@ -5848,6 +6074,8 @@
         },
         {
           "campaign_id": "23694741058",
+          "campaign_name": "DG_WithoutFeed 25-03 -low RTO states",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 1800.0,
           "yesterday_spend": 1769.9,
@@ -5894,6 +6122,8 @@
         },
         {
           "campaign_id": "23764695979",
+          "campaign_name": "DG_WithoutFeed 28/12 #2",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 720.0,
           "yesterday_spend": 716.33,
@@ -5940,6 +6170,8 @@
         },
         {
           "campaign_id": "23764702966",
+          "campaign_name": "DG_WithoutFeed 28/12 #3",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 600.0,
           "yesterday_spend": 596.38,
@@ -5986,6 +6218,8 @@
         },
         {
           "campaign_id": "23843492774",
+          "campaign_name": "Demand Gen_VIDEO_13-05-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 600.0,
           "yesterday_spend": 3.62,
@@ -6032,6 +6266,8 @@
         },
         {
           "campaign_id": "23696971583",
+          "campaign_name": "pmax_banner+video_27-03-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 8500.0,
           "yesterday_spend": 8326.95,
@@ -6078,6 +6314,8 @@
         },
         {
           "campaign_id": "23843449178",
+          "campaign_name": "PMAX_VIDEO+BANNER_13-05-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 750.0,
           "yesterday_spend": 992.77,
@@ -6170,21 +6408,24 @@
     },
     "685d04a572a04e21d2559c87": {
       "seller_id": "685d04a572a04e21d2559c87",
+      "seller_name": "Ansari Fashion",
       "weekly_plan": {
         "last_sunday_spend": 14743.0,
         "this_week_target": 8000.0,
         "yesterday_daily_spend": 15064.22,
         "current_week_spend": 43886.5,
         "remaining_gap": -7064.22,
-        "required_daily_pace": -1766.05,
+        "required_daily_pace": -2354.74,
         "existing_capacity": -3371.5,
         "new_structure_req": -3371.5,
-        "remaining_days": 4,
+        "remaining_days": 3,
         "direction": "Scale Down"
       },
       "campaigns": [
         {
           "campaign_id": "23722512684",
+          "campaign_name": "Demand Gen_videos_06-04-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 1000.0,
           "yesterday_spend": 1040.68,
@@ -6231,6 +6472,8 @@
         },
         {
           "campaign_id": "23733514779",
+          "campaign_name": "Demand Gen_videos_09-04-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 1920.0,
           "yesterday_spend": 1968.27,
@@ -6277,6 +6520,8 @@
         },
         {
           "campaign_id": "23738485631",
+          "campaign_name": "Demand Gen_videos_09-04-2026 Women only",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 1300.0,
           "yesterday_spend": 1282.61,
@@ -6323,6 +6568,8 @@
         },
         {
           "campaign_id": "23792530259",
+          "campaign_name": "DG|  CRT1 | 1-1 |25/04",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 1411.2,
           "yesterday_spend": 1414.83,
@@ -6369,6 +6616,8 @@
         },
         {
           "campaign_id": "23830913207",
+          "campaign_name": "DG|  CRT-R | 08-05-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 500.0,
           "yesterday_spend": 507.82,
@@ -6415,6 +6664,8 @@
         },
         {
           "campaign_id": "23560731284",
+          "campaign_name": "PmaxBanner_TopSelling_1302",
+          "campaign_status": "PAUSED",
           "campaign_type": "pmax_banner",
           "budget": 1200.0,
           "yesterday_spend": 1244.34,
@@ -6461,6 +6712,8 @@
         },
         {
           "campaign_id": "23690333932",
+          "campaign_name": "PMAX_BANNERS_24-03-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 800.0,
           "yesterday_spend": 862.85,
@@ -6507,6 +6760,8 @@
         },
         {
           "campaign_id": "23732281837",
+          "campaign_name": "pmax_banners+videos_06-04-2026",
+          "campaign_status": "PAUSED",
           "campaign_type": "pmax_banner",
           "budget": 570.0,
           "yesterday_spend": 665.71,
@@ -6553,6 +6808,8 @@
         },
         {
           "campaign_id": "23733385854",
+          "campaign_name": "PMAX_ Banners _ 09 April",
+          "campaign_status": "PAUSED",
           "campaign_type": "pmax_banner",
           "budget": 400.0,
           "yesterday_spend": 346.34,
@@ -6599,6 +6856,8 @@
         },
         {
           "campaign_id": "23757053981",
+          "campaign_name": "pmax_banners+aivideo_15-04-2026 #3",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 800.0,
           "yesterday_spend": 791.54,
@@ -6645,6 +6904,8 @@
         },
         {
           "campaign_id": "23822069463",
+          "campaign_name": "pmax_PKR1_1/30/04/2026 #2",
+          "campaign_status": "PAUSED",
           "campaign_type": "pmax_banner",
           "budget": NaN,
           "yesterday_spend": 0.0,
@@ -6691,6 +6952,8 @@
         },
         {
           "campaign_id": "23824213119",
+          "campaign_name": "PKR | MPP | 08/05",
+          "campaign_status": "PAUSED",
           "campaign_type": "pmax_banner",
           "budget": NaN,
           "yesterday_spend": 0.0,
@@ -6737,6 +7000,8 @@
         },
         {
           "campaign_id": "23858218798",
+          "campaign_name": "PKR | MP | 16/05",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 750.0,
           "yesterday_spend": 1151.33,
@@ -6783,6 +7048,8 @@
         },
         {
           "campaign_id": "23381343779",
+          "campaign_name": "PmaxFeedOnly 19/12",
+          "campaign_status": "PAUSED",
           "campaign_type": "pmax_feed",
           "budget": 960.0,
           "yesterday_spend": 798.61,
@@ -6829,6 +7096,8 @@
         },
         {
           "campaign_id": "23762049598",
+          "campaign_name": "brand_search_15-04-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "search",
           "budget": 1800.0,
           "yesterday_spend": 1940.99,
@@ -6875,6 +7144,8 @@
         },
         {
           "campaign_id": "23848310847",
+          "campaign_name": "Shopping | RL | Top 29 BS | 16/05",
+          "campaign_status": "ENABLED",
           "campaign_type": "shopping",
           "budget": 1000.0,
           "yesterday_spend": 1048.3,
@@ -7017,21 +7288,24 @@
     },
     "686cb47f8f9fbe1d38d8f04b": {
       "seller_id": "686cb47f8f9fbe1d38d8f04b",
+      "seller_name": "Sunmate Cookware",
       "weekly_plan": {
         "last_sunday_spend": 4404.0,
         "this_week_target": 4500.0,
         "yesterday_daily_spend": 4243.17,
         "current_week_spend": 11810.95,
         "remaining_gap": 256.83,
-        "required_daily_pace": 64.21,
+        "required_daily_pace": 85.61,
         "existing_capacity": 48.0,
         "new_structure_req": 48.0,
-        "remaining_days": 4,
+        "remaining_days": 3,
         "direction": "Scale Up"
       },
       "campaigns": [
         {
           "campaign_id": "23437156748",
+          "campaign_name": "Ultimate Products - Demand Gen - 2026-01-07",
+          "campaign_status": "PAUSED",
           "campaign_type": "demand_gen",
           "budget": 1200.0,
           "yesterday_spend": 1202.26,
@@ -7078,6 +7352,8 @@
         },
         {
           "campaign_id": "23589988023",
+          "campaign_name": "DNT_OS_Ultimate Products - Demand Gen - 16/01 #2",
+          "campaign_status": "PAUSED",
           "campaign_type": "demand_gen",
           "budget": 500.0,
           "yesterday_spend": 761.29,
@@ -7124,6 +7400,8 @@
         },
         {
           "campaign_id": "23790139090",
+          "campaign_name": "DG|  CRT1 | 1-1 |23/04",
+          "campaign_status": "PAUSED",
           "campaign_type": "demand_gen",
           "budget": 600.0,
           "yesterday_spend": 309.06,
@@ -7170,6 +7448,8 @@
         },
         {
           "campaign_id": "23835387580",
+          "campaign_name": "DG|  CRT-R | 1-1 |23/04 #2",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 500.0,
           "yesterday_spend": 119.89,
@@ -7216,6 +7496,8 @@
         },
         {
           "campaign_id": "23844545177",
+          "campaign_name": "DG | CRI |13/05",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 500.0,
           "yesterday_spend": 512.73,
@@ -7262,6 +7544,8 @@
         },
         {
           "campaign_id": "23844645770",
+          "campaign_name": "DG | CRI-13/05",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 400.0,
           "yesterday_spend": 430.74,
@@ -7308,6 +7592,8 @@
         },
         {
           "campaign_id": "23666859350",
+          "campaign_name": "PMAX_BANNERS_18-03-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 860.0,
           "yesterday_spend": 907.2,
@@ -7425,21 +7711,24 @@
     },
     "689da746ec03842a1b6aa397": {
       "seller_id": "689da746ec03842a1b6aa397",
+      "seller_name": "Luxhara",
       "weekly_plan": {
         "last_sunday_spend": 9640.0,
         "this_week_target": 8500.0,
         "yesterday_daily_spend": 7806.76,
         "current_week_spend": 24445.07,
         "remaining_gap": 693.24,
-        "required_daily_pace": 173.31,
+        "required_daily_pace": 231.08,
         "existing_capacity": -570.0,
         "new_structure_req": -570.0,
-        "remaining_days": 4,
+        "remaining_days": 3,
         "direction": "Scale Down"
       },
       "campaigns": [
         {
           "campaign_id": "23610479647",
+          "campaign_name": "Luxhara | Demand Gen Video Campaign | 27/02/2026",
+          "campaign_status": "PAUSED",
           "campaign_type": "demand_gen",
           "budget": 3600.0,
           "yesterday_spend": 405.06,
@@ -7486,6 +7775,8 @@
         },
         {
           "campaign_id": "23734997711",
+          "campaign_name": "Demand Gen - 2026-04-08",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 3000.0,
           "yesterday_spend": 3245.16,
@@ -7532,6 +7823,8 @@
         },
         {
           "campaign_id": "23835319894",
+          "campaign_name": "DG | CRT-R | 08/05",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 500.0,
           "yesterday_spend": 183.4,
@@ -7578,6 +7871,8 @@
         },
         {
           "campaign_id": "23706803691",
+          "campaign_name": "pmax_banners_01-04-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 1600.0,
           "yesterday_spend": 1496.25,
@@ -7624,6 +7919,8 @@
         },
         {
           "campaign_id": "23737928633",
+          "campaign_name": "PMAX_BANNERS_09-04-2026",
+          "campaign_status": "PAUSED",
           "campaign_type": "pmax_banner",
           "budget": 900.0,
           "yesterday_spend": 1237.3,
@@ -7670,6 +7967,8 @@
         },
         {
           "campaign_id": "23776090454",
+          "campaign_name": "LuxeHara | Pmax Banner Campaign | 21-04-2026",
+          "campaign_status": "PAUSED",
           "campaign_type": "pmax_banner",
           "budget": 1300.0,
           "yesterday_spend": 1060.57,
@@ -7716,6 +8015,8 @@
         },
         {
           "campaign_id": "23842999596",
+          "campaign_name": "PKR | SP | Pmax | 13/05",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 500.0,
           "yesterday_spend": 179.02,
@@ -7762,6 +8063,8 @@
         },
         {
           "campaign_id": "23848339134",
+          "campaign_name": "Shopping | RL | Top 20 BS | 16/05",
+          "campaign_status": "ENABLED",
           "campaign_type": "shopping",
           "budget": 1000.0,
           "yesterday_spend": 0.0,
@@ -7874,21 +8177,24 @@
     },
     "68b01ab0859590b2aa4218bf": {
       "seller_id": "68b01ab0859590b2aa4218bf",
+      "seller_name": "THESHREE",
       "weekly_plan": {
         "last_sunday_spend": 14.0,
         "this_week_target": 30000.0,
         "yesterday_daily_spend": 2991.61,
         "current_week_spend": 2991.61,
         "remaining_gap": 27008.39,
-        "required_daily_pace": 6752.1,
+        "required_daily_pace": 9002.8,
         "existing_capacity": 14993.0,
         "new_structure_req": 14993.0,
-        "remaining_days": 4,
+        "remaining_days": 3,
         "direction": "Scale Up"
       },
       "campaigns": [
         {
           "campaign_id": "23859641907",
+          "campaign_name": "Demand Gen_videos_20-05-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 900.0,
           "yesterday_spend": 63.53,
@@ -7935,6 +8241,8 @@
         },
         {
           "campaign_id": "23858929365",
+          "campaign_name": "Pmax | Banner | 20/05",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 600.0,
           "yesterday_spend": 1427.24,
@@ -7981,6 +8289,8 @@
         },
         {
           "campaign_id": "23864272208",
+          "campaign_name": "PMAX | Banner | 20/05",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 600.0,
           "yesterday_spend": 1500.84,
@@ -8077,21 +8387,24 @@
     },
     "68b98dcd71b145fda886c730": {
       "seller_id": "68b98dcd71b145fda886c730",
+      "seller_name": "P&M CREATIONS",
       "weekly_plan": {
         "last_sunday_spend": 6847.0,
         "this_week_target": 8000.0,
         "yesterday_daily_spend": 7630.59,
         "current_week_spend": 21974.19,
         "remaining_gap": 369.41,
-        "required_daily_pace": 92.35,
+        "required_daily_pace": 123.14,
         "existing_capacity": 576.5,
         "new_structure_req": 576.5,
-        "remaining_days": 4,
+        "remaining_days": 3,
         "direction": "Scale Up"
       },
       "campaigns": [
         {
           "campaign_id": "23426926287",
+          "campaign_name": "Demand Gen \u2013 2026-01-06",
+          "campaign_status": "PAUSED",
           "campaign_type": "demand_gen",
           "budget": 1200.0,
           "yesterday_spend": 1249.36,
@@ -8138,6 +8451,8 @@
         },
         {
           "campaign_id": "23633098984",
+          "campaign_name": "Demand Gen _ videos_06-03-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 1440.0,
           "yesterday_spend": 981.74,
@@ -8184,6 +8499,8 @@
         },
         {
           "campaign_id": "23833318208",
+          "campaign_name": "DG-CRT-R-9May26",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 500.0,
           "yesterday_spend": 113.63,
@@ -8230,6 +8547,8 @@
         },
         {
           "campaign_id": "23694734821",
+          "campaign_name": "P&M CREATIONS | Pmax Banner | MBS not picked | 25Mar26",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 400.0,
           "yesterday_spend": 130.54,
@@ -8276,6 +8595,8 @@
         },
         {
           "campaign_id": "23713795906",
+          "campaign_name": "pmax_banners_31-03-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 2200.0,
           "yesterday_spend": 2409.63,
@@ -8322,6 +8643,8 @@
         },
         {
           "campaign_id": "23774122059",
+          "campaign_name": "pmax_banners_22-04-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 1550.0,
           "yesterday_spend": 1682.16,
@@ -8368,6 +8691,8 @@
         },
         {
           "campaign_id": "23614457227",
+          "campaign_name": "pmax FEED | 28-02-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_feed",
           "budget": 1800.0,
           "yesterday_spend": 1063.53,
@@ -8460,21 +8785,24 @@
     },
     "68c42e0d0a341925606f5c37": {
       "seller_id": "68c42e0d0a341925606f5c37",
+      "seller_name": "Sagyaa",
       "weekly_plan": {
         "last_sunday_spend": 5701.0,
         "this_week_target": 7100.0,
         "yesterday_daily_spend": 5035.01,
         "current_week_spend": 15331.0,
         "remaining_gap": 2064.99,
-        "required_daily_pace": 516.25,
+        "required_daily_pace": 688.33,
         "existing_capacity": 699.5,
         "new_structure_req": 699.5,
-        "remaining_days": 4,
+        "remaining_days": 3,
         "direction": "Scale Up"
       },
       "campaigns": [
         {
           "campaign_id": "23844519803",
+          "campaign_name": "DG | CRT | 13/05",
+          "campaign_status": "ENABLED",
           "campaign_type": "demand_gen",
           "budget": 500.0,
           "yesterday_spend": 42.11,
@@ -8521,6 +8849,8 @@
         },
         {
           "campaign_id": "23551139249",
+          "campaign_name": "Pmax Banner Camp.| 10/02/26",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_banner",
           "budget": 2900.0,
           "yesterday_spend": 2845.58,
@@ -8567,6 +8897,8 @@
         },
         {
           "campaign_id": "23727716597",
+          "campaign_name": "pmax_banner+video_06-04-2026",
+          "campaign_status": "PAUSED",
           "campaign_type": "pmax_banner",
           "budget": 1800.0,
           "yesterday_spend": 135.22,
@@ -8613,6 +8945,8 @@
         },
         {
           "campaign_id": "23774812275",
+          "campaign_name": "Sagyaa | Pmax Banner Campaign | 22-04-2026",
+          "campaign_status": "PAUSED",
           "campaign_type": "pmax_banner",
           "budget": 1500.0,
           "yesterday_spend": 1430.67,
@@ -8659,6 +8993,8 @@
         },
         {
           "campaign_id": "23822134530",
+          "campaign_name": "pmax_PKR1_1/30/04/2026 #2",
+          "campaign_status": "PAUSED",
           "campaign_type": "pmax_banner",
           "budget": NaN,
           "yesterday_spend": 0.0,
@@ -8705,6 +9041,8 @@
         },
         {
           "campaign_id": "23824332954",
+          "campaign_name": "PKR | MPP | 08/05",
+          "campaign_status": "PAUSED",
           "campaign_type": "pmax_banner",
           "budget": NaN,
           "yesterday_spend": 0.0,
@@ -8751,6 +9089,8 @@
         },
         {
           "campaign_id": "23856380778",
+          "campaign_name": "sagyaa | Pmax Banner Campaign | 19-05-2026",
+          "campaign_status": "PAUSED",
           "campaign_type": "pmax_banner",
           "budget": 1000.0,
           "yesterday_spend": 416.99,
@@ -8797,6 +9137,8 @@
         },
         {
           "campaign_id": "23848443531",
+          "campaign_name": "Shopping | ML | Top 21 BS | 16/05",
+          "campaign_status": "ENABLED",
           "campaign_type": "shopping",
           "budget": 750.0,
           "yesterday_spend": 164.44,
@@ -8904,21 +9246,24 @@
     },
     "6913216f317e68f10e6d6cb8": {
       "seller_id": "6913216f317e68f10e6d6cb8",
+      "seller_name": "Bounty Bliss",
       "weekly_plan": {
         "last_sunday_spend": 3581.0,
         "this_week_target": 7000.0,
         "yesterday_daily_spend": 4815.64,
         "current_week_spend": 13483.2,
         "remaining_gap": 2184.36,
-        "required_daily_pace": 546.09,
+        "required_daily_pace": 728.12,
         "existing_capacity": 1709.5,
         "new_structure_req": 1709.5,
-        "remaining_days": 4,
+        "remaining_days": 3,
         "direction": "Scale Up"
       },
       "campaigns": [
         {
           "campaign_id": "23731427504",
+          "campaign_name": "pmax_feed+banner_07-04-2026",
+          "campaign_status": "PAUSED",
           "campaign_type": "pmax_banner",
           "budget": 3000.0,
           "yesterday_spend": 3462.8,
@@ -8965,6 +9310,8 @@
         },
         {
           "campaign_id": "23587171187",
+          "campaign_name": "Pmax_Feed_21/02",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_feed",
           "budget": 600.0,
           "yesterday_spend": 615.5,
@@ -9011,6 +9358,8 @@
         },
         {
           "campaign_id": "23820095978",
+          "campaign_name": "Bounty Bliss | Pmax feed Campaign | 05-05-2026",
+          "campaign_status": "ENABLED",
           "campaign_type": "pmax_feed",
           "budget": 500.0,
           "yesterday_spend": 83.81,
@@ -9057,6 +9406,8 @@
         },
         {
           "campaign_id": "23820409171",
+          "campaign_name": "Bounty Bliss | Pmax Feed Campaign | 04-05-2026",
+          "campaign_status": "PAUSED",
           "campaign_type": "pmax_feed",
           "budget": 850.0,
           "yesterday_spend": 653.53,

@@ -23,7 +23,7 @@ SCOPES = [
 ]
 
 HISTORY_HEADERS = [
-    'action_date', 'seller_id', 'campaign_id', 'campaign_type',
+    'action_date', 'seller_id', 'campaign_id', 'campaign_name', 'campaign_status', 'campaign_type',
     'previous_budget', 'recommended_budget', 'action_type', 'budget_change_pct',
     'rebalancing_score', 'campaign_state',
     'efficiency_score', 'spendability_score', 'stability_score',
@@ -84,6 +84,8 @@ def write_action_history(results: dict):
                 today,
                 seller_id,
                 _clean(c['campaign_id']),
+                _clean(c.get('campaign_name', '')),
+                _clean(c.get('campaign_status', '')),
                 _clean(c['campaign_type']),
                 _clean(c['budget']),
                 _clean(c['recommended_budget']),

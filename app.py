@@ -156,6 +156,8 @@ def campaigns_to_df(campaigns):
     for c in campaigns:
         rows.append({
             'Campaign ID':    str(c['campaign_id']),
+            'Name':           c.get('campaign_name', ''),
+            'Status':         c.get('campaign_status', ''),
             'Type':           c['campaign_type'],
             'Budget':         safe_float(c['budget']),
             'Rec Budget':     safe_float(c['recommended_budget']),
@@ -181,7 +183,8 @@ def build_excel(sellers):
             status, _ = account_status(sd.get('account_metrics', {}))
             gap_lbl, _ = gap_status(p['remaining_gap'])
             ov.append({
-                'Seller ID': sid, 'Status': status, 'Gap Status': gap_lbl,
+                'Seller Name': sd.get('seller_name', ''), 'Seller ID': sid,
+                'Status': status, 'Gap Status': gap_lbl,
                 'Last Sunday': p['last_sunday_spend'], 'Target': p['this_week_target'],
                 'Yesterday': p['yesterday_daily_spend'], 'Gap': p['remaining_gap'],
                 'Pace/Day': p['required_daily_pace'], 'Direction': p['direction'],
@@ -192,7 +195,8 @@ def build_excel(sellers):
             })
         pd.DataFrame(ov).to_excel(w, sheet_name='Overview', index=False)
         for sid, sd in sellers.items():
-            campaigns_to_df(sd['campaigns']).to_excel(w, sheet_name=sid[:31], index=False)
+            tab_name = (sd.get('seller_name') or sid)[:31]
+            campaigns_to_df(sd['campaigns']).to_excel(w, sheet_name=tab_name, index=False)
     buf.seek(0)
     return buf.getvalue()
 
@@ -245,9 +249,11 @@ if st.session_state.selected_seller:
         st.rerun()
 
     # Seller title
+    seller_name = sdata.get('seller_name') or ''
     c1, c2 = st.columns([6, 1])
     with c1:
-        st.markdown(f"### `{sid}`")
+        title = f"**{seller_name}**  `{sid}`" if seller_name else f"`{sid}`"
+        st.markdown(f"### {title}")
     with c2:
         st.markdown(badge(status, status_cls) + '&nbsp;' + badge(gap_lbl, gap_cls), unsafe_allow_html=True)
 
@@ -422,8 +428,10 @@ else:
         n_reduce = sum(1 for c in camps if c['action_type'] in ('scale_down','pause','watch_reduce'))
         n_alerts = len(sdata['alerts'])
 
+        seller_name = sdata.get('seller_name', '')
         overview_rows.append({
             '_seller_id':  sid,
+            'Seller':      seller_name or sid[:20],
             'Seller ID':   sid,
             'Status':      badge(status, status_cls),
             'Gap Status':  badge(gap_lbl, gap_cls),
@@ -445,7 +453,7 @@ else:
         st.info("No sellers match the selected filters.")
     else:
         # Render as HTML table for badge support
-        col_order = ['Seller ID','Status','Gap Status','Direction','Last Sunday','Target','Yesterday','Gap','Pace/Day','Campaigns','↑ Scale','↓ Reduce','⚠ Alerts']
+        col_order = ['Seller','Status','Gap Status','Direction','Last Sunday','Target','Yesterday','Gap','Pace/Day','Campaigns','↑ Scale','↓ Reduce','⚠ Alerts']
         header_html = ''.join(f'<th style="padding:8px 12px;text-align:left;background:#f8fafc;border-bottom:2px solid #e2e8f0;font-size:12px;font-weight:700;color:#64748b;white-space:nowrap">{c}</th>' for c in col_order)
 
         rows_html = ''
@@ -453,8 +461,8 @@ else:
             cells = ''
             for col in col_order:
                 val = row.get(col, '—')
-                if col == 'Seller ID':
-                    val = f'<span style="font-family:monospace;font-size:12px;color:#0f172a">{val[:24]}...</span>'
+                if col == 'Seller':
+                    val = f'<span style="font-weight:600;color:#0f172a">{val}</span>'
                 elif col == '⚠ Alerts' and isinstance(val, int) and val > 0:
                     val = f'<span style="color:#dc2626;font-weight:700">{val}</span>'
                 cells += f'<td style="padding:10px 12px;border-bottom:1px solid #f1f5f9;font-size:13px;vertical-align:middle">{val}</td>'
