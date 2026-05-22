@@ -40,9 +40,14 @@ def _get_client() -> gspread.Client:
 def _get_or_create_sheet(spreadsheet, name: str, headers: list):
     try:
         ws = spreadsheet.worksheet(name)
+        # Ensure header row matches current schema (update in place if needed)
+        existing = ws.row_values(1)
+        if existing != headers:
+            ws.resize(rows=ws.row_count, cols=len(headers))
+            ws.update('1:1', [headers])
     except gspread.exceptions.WorksheetNotFound:
         ws = spreadsheet.add_worksheet(title=name, rows=10000, cols=len(headers))
-        ws.append_row(headers)
+        ws.update('1:1', [headers])
     return ws
 
 
@@ -52,15 +57,31 @@ def read_action_history() -> dict:
     ss = gc.open_by_key(GOOGLE_SHEETS_ID)
     ws = _get_or_create_sheet(ss, HISTORY_SHEET_NAME, HISTORY_HEADERS)
 
-    records = ws.get_all_records()
+    # Use get_all_values to bypass header validation issues
+    all_values = ws.get_all_values()
+    if len(all_values) <= 1:
+        return {}
+
+    headers   = all_values[0]
+    data_rows = all_values[1:]
+
+    records = []
+    for row in data_rows:
+        record = {headers[i]: (row[i] if i < len(row) else '')
+                  for i in range(len(headers)) if headers[i]}
+        if any(record.values()):
+            records.append(record)
+
     if not records:
         return {}
 
     df = pd.DataFrame(records)
+    if 'action_date' not in df.columns:
+        return {}
+
     df['action_date'] = pd.to_datetime(df['action_date'], errors='coerce')
     df = df.sort_values('action_date', ascending=False)
 
-    # Keep only the most recent row per (seller_id, campaign_id)
     latest = df.drop_duplicates(subset=['seller_id', 'campaign_id'], keep='first')
     history = {}
     for _, row in latest.iterrows():
